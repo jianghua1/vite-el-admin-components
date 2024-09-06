@@ -28,6 +28,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@unocss/reset": "^0.62.3",
     "vue": "^3.4.29"
   },
   "devDependencies": {
@@ -43,6 +44,7 @@
     "jsdom": "^24.1.0",
     "npm-run-all2": "^6.2.0",
     "typescript": "~5.4.0",
+    "unocss": "^0.62.3",
     "vite": "^5.3.1",
     "vite-plugin-dts": "^4.0.3",
     "vitest": "^1.6.0",

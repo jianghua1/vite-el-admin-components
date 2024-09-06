@@ -2,10 +2,10 @@
   <div>
     <router-view />
   </div>
-  <div>111</div>
+  <AvatarList>111</AvatarList>
 </template>
 <script setup lang="ts">
-
+import { AvatarList } from 'el-admin-components';
 </script>
 
 <style scoped></style>

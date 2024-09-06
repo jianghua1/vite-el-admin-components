@@ -1,5 +1,4 @@
-import HelloWorldVue from "./components/HelloWorld.vue";
-import TheWelcomeVue from "./components/TheWelcome.vue";
-import WelcomeItemVue from "./components/WelcomeItem.vue";
+// import HelloWorldVue from "./components/HelloWorld.vue";
+// export { HelloWorldVue };
 
-export { HelloWorldVue, TheWelcomeVue, WelcomeItemVue };
+export { default as AvatarList } from "./components/Avatar/AvatarList.vue";

@@ -1,12 +1,9 @@
 // uno.config.ts
-import {
-  defineConfig,
-  transformerDirectives,
-  transformerVariantGroup,
-  presetWind,
-  presetIcons
-} from 'unocss'
+import { defineConfig } from 'unocss'
 // import presetWind from '@unocss/preset-wind'
+import { presetWind, presetIcons } from 'unocss'
+import transformerDirectives from '@unocss/transformer-directives'
+import transformerVariantGroup from '@unocss/transformer-variant-group'
 
 export default defineConfig({
   rules: [
@@ -35,10 +32,10 @@ export default defineConfig({
       md: '768px',
       lg: '1024px',
       xl: '1280px',
-      xl2: '1440px',
+      xl2: '1444px',
       '2xl': '1536px'
     }
   },
-  safelist: ['i-ep:full-screen', 'i-ri:fullscreen-exit-fill'],
-  transformers: [transformerDirectives()]
+  safelist: ['ep:full-screen', 'ri:fullscreen-exit-fill'],
+  transformers: [transformerDirectives(), transformerVariantGroup()]
 })

@@ -1,0 +1,19 @@
+{
+  "watch": [
+    "src/"
+  ],
+  "ignore": [
+    "src/*.ts",
+    "nodemon.json",
+    "public/*",
+    "locales/*",
+    "dist/*",
+    "node_modules/**",
+    "playground/**",
+    ".vscode/**",
+    ".git"
+  ],
+  "exec": "node build/script.cjs",
+  "ext": "ts vue json",
+  "delay": "1000"
+}

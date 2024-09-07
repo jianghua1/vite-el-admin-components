@@ -56,7 +56,8 @@
   },
   "dependencies": {
     "@unocss/reset": "^0.58.6",
-    "defu": "^6.1.4"
+    "defu": "^6.1.4",
+    "gsap": "^3.12.5"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.193",

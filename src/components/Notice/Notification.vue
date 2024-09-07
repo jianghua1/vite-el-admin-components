@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { NotificationProps } from './types
+import type { NotificationProps } from './types'
 import { Icon } from '@iconify/vue'
 //初始化组件参数
 const props = withDefaults(defineProps<NotificationProps>(), {

@@ -1,14 +1,22 @@
 <template>
   <ul :class="wrapperClass">
-    <li v-for="(item, index) in newImages" :key="index" class="rounded-full flex border-white" :style="{
-      ...styles,
-      borderColor,
-      borderWidth,
-      zIndex: reverse ? newImages.length - index : index
-    }">
+    <li
+      v-for="(item, index) in newImages"
+      :key="index"
+      class="rounded-full flex border-white"
+      :style="{
+        ...styles,
+        borderColor,
+        borderWidth,
+        zIndex: reverse ? newImages.length - index : index
+      }"
+    >
       <slot name="item" :item="item">
-        <el-avatar :src="typeof item !== 'string' ? item.src : item" :size="size"
-          @click="() => handleClick(item, index)"></el-avatar>
+        <el-avatar
+          :src="typeof item !== 'string' ? item.src : item"
+          :size="size"
+          @click="() => handleClick(item, index)"
+        ></el-avatar>
       </slot>
     </li>
     <li v-if="num && showMore" class="more" :style="moreStyle">...</li>

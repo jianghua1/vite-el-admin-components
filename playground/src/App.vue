@@ -1,13 +1,10 @@
 <template>
   <div>
-    <router-view />
+    <EpIconList></EpIconList>
   </div>
-  <AvatarList :images="images"></AvatarList>
 </template>
 <script setup lang="ts">
-import { AvatarList } from 'el-admin-components';
-
-const images = ['https://img.yzcdn.cn/vant/cat.jpeg', 'https://img.yzcdn.cn/vant/cat.jpeg', 'https://img.yzcdn.cn/vant/cat.jpeg']
+import EpIconList from './icons/ep-icon-list.vue'
 </script>
 
 <style scoped></style>

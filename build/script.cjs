@@ -2,6 +2,7 @@
 // 读取components中所有.vue结尾的文件
 const path = require('path')
 const fs = require('fs')
+const { exec } = require('child_process')
 
 const appendMarker = '// append-by-scripts'
 
@@ -12,11 +13,13 @@ const getPath = (name) => path.join(basePath, name)
 //定义组件所在目录
 const componentsDir = getPath('src/components')
 const mainFilePath = getPath('src/main.ts')
+const typesFilePath = getPath('src/components-types.ts')
 
 let componentExports = ''
 let pluginContentLines = []
 let components = []
 let hooksExports = ''
+let typesExports = ''
 
 function walkDir(dir) {
   //读取当前目录中所有的文件
@@ -33,10 +36,10 @@ function walkDir(dir) {
         const extension = path.extname(file)
         //获取文件名称
         const baseName = path.basename(file, extension)
-        const importPath = `@/components/${path
+        const importPath = `./components/${path
           .relative(componentsDir, filePath)
           .replace(/\\/g, '/')}`
-
+        //处理组件
         if (extension === '.vue') {
           componentExports += `import ${baseName} from '${importPath}';\n`
           components.push(baseName)
@@ -47,9 +50,15 @@ function walkDir(dir) {
           //app.use('xxx',xxx)
           pluginContentLines.push(` app.component('${componentName}',${baseName}) `)
         }
-
+        //处理composition API方法
         if (extension === '.ts' && baseName.startsWith('use')) {
-          hooksExports += `export {${baseName}} from '${importPath}';\n`
+          hooksExports += `export {${baseName}} from '${importPath.replace('.ts', '')}';\n`
+        }
+        //处理types并导出
+        if (extension === '.ts' && baseName.startsWith('type')) {
+          //读取types文件的内容
+          // const typesFileContent = fs.readFileSync(filePath, 'utf-8')
+          typesExports += `export * from '${importPath.replace('.ts', '')}';\n`
         }
       }
     }
@@ -57,6 +66,9 @@ function walkDir(dir) {
 }
 
 walkDir(componentsDir)
+
+// 写类型文件
+fs.writeFileSync(typesFilePath, typesExports)
 // 按照export句式写入到src/main.ts中的"// append-by-scripts" 之后
 let mainFileContent = fs.readFileSync(mainFilePath, 'utf-8')
 // 获取标记
@@ -81,3 +93,17 @@ export {${components.join(', ')}}
 
 mainFileContent += '\n' + `${componentExports}\n${pluginContent}\n${hooksExports}`
 fs.writeFileSync(mainFilePath, mainFileContent)
+console.log('build script ok')
+
+exec('npm run format', (err, stdout, stderr) => {
+  if (err) {
+    console.error(`执行命令出错: ${err}`)
+    return
+  }
+  if (stderr) {
+    console.error(`stderr: ${stderr}`)
+  }
+  if (stdout) {
+    console.log(`stdout: ${stdout}`)
+  }
+})

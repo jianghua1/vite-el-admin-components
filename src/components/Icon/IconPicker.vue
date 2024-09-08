@@ -7,8 +7,13 @@
     <!-- dialog -->
     <el-dialog :title="title" :width="width" v-model="show">
       <!-- icon-list -->
-      <IconList @click="handleClick1" :show-text="showTextFlag" active-class="text-[#409EFF]"
-        item-class="'hover:bg-sky-200" icon-class="text-2xl"></IconList>
+      <IconList
+        @click="handleClick1"
+        :show-text="showTextFlag"
+        active-class="text-[#409EFF]"
+        item-class="'hover:bg-sky-200"
+        icon-class="text-2xl"
+      ></IconList>
       <!-- setting 颜色和大小 -->
       <div class="p-2 flex">
         <div class="mr-4">
@@ -33,9 +38,9 @@
   </div>
 </template>
 
-<script setup lang='ts'>
-import { Icon } from '@iconify/vue';
-import type { IconPickerSubmitDataType } from './types';
+<script setup lang="ts">
+import { Icon } from '@iconify/vue'
+import type { IconPickerSubmitDataType } from './types'
 
 defineProps({
   width: {
@@ -58,11 +63,12 @@ const [show, toggle] = useToggle(false)
 const iconRef = ref('')
 const iconPrefix = ref('ep')
 const handleClick1 = (iconName: string) => {
-  iconRef.value = iconPrefix.value + ":" + iconName
+  iconRef.value = iconPrefix.value + ':' + iconName
 }
 
 const emits = defineEmits<{
-  'submit': [IconPickerSubmitDataType], 'cancel': []
+  submit: [IconPickerSubmitDataType]
+  cancel: []
 }>()
 
 // 确定并关闭模态框，将icon 颜色 大小传给IconPicker
@@ -70,7 +76,6 @@ const handleConfirm = () => {
   toggle(false)
   emits('submit', { icon: iconRef.value, color: color1.value, fontSize: num.value })
 }
-
 </script>
 <style scoped lang="scss">
 :deep(.el-dialog_body) {

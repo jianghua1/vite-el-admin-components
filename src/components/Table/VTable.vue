@@ -1,6 +1,10 @@
 <template>
   <el-table v-loading="loading" v-bind="props" v-on="events" style="width: 100%" ref="tableRef">
-    <Column v-for="(column, index) in columns" :key="column.id || index" v-bind="setColumnDefaults(column)">
+    <Column
+      v-for="(column, index) in columns"
+      :key="column.id || index"
+      v-bind="setColumnDefaults(column)"
+    >
     </Column>
     <slot></slot>
   </el-table>
@@ -16,12 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { TableEmitsType, TableEventsType, TableColumnType, VTableProps } from './types';
-import { isDefined } from '@vueuse/core';
-import Column from './VTableColumn.vue';
+import type { TableEmitsType, TableEventsType, TableColumnType, VTableProps } from './types'
+import { isDefined } from '@vueuse/core'
+import Column from './VTableColumn.vue'
 import { forwardEventsUtils, exposeEventsUtils } from '@/utils'
-import { nextTick } from 'vue';
-import Sortable from 'sortablejs';
+import { nextTick } from 'vue'
+import Sortable from 'sortablejs'
 
 const props = withDefaults(defineProps<VTableProps>(), {
   stripe: false,
@@ -64,32 +68,27 @@ const eventsName: (keyof TableEventsType)[] = [
   'filter-change',
   'current-change',
   'header-dragend',
-  'expand-change',
-];
-
-const pageEventName = [
-  'size-change',
-  'current-change',
-  'prev-click',
-  'next-click'
+  'expand-change'
 ]
+
+const pageEventName = ['size-change', 'current-change', 'prev-click', 'next-click']
 
 const tableRef = ref()
 const exposeEventNames = [
-  "clearSelection",
-  "getSelectionRows",
-  "toggleRowSelection",
-  "toggleAllSelection",
-  "toggleRowExpansion",
-  "setCurrentRow",
-  "clearSort",
-  "clearFilter",
-  "doLayout",
-  "sort",
-  "scrollTo",
-  "setScrollTop",
-  "setScrollLeft",
-  "columns"
+  'clearSelection',
+  'getSelectionRows',
+  'toggleRowSelection',
+  'toggleAllSelection',
+  'toggleRowExpansion',
+  'setCurrentRow',
+  'clearSort',
+  'clearFilter',
+  'doLayout',
+  'sort',
+  'scrollTo',
+  'setScrollTop',
+  'setScrollLeft',
+  'columns'
 ]
 const pageEvents = forwardEventsUtils(emits, pageEventName, 'page-')
 const events = forwardEventsUtils(emits, eventsName)
@@ -126,8 +125,7 @@ async function setAdaptive() {
       offset = props.adaptive
     }
     //窗口高度-table距离顶部的高度-table距离底部的高度
-    const height = window.innerHeight -
-      tableRef.value.$el.getBoundingClientRect().top - offset
+    const height = window.innerHeight - tableRef.value.$el.getBoundingClientRect().top - offset
     tableRef.value.style.height = height + 'px'
   }
 }
@@ -139,8 +137,7 @@ useResizeObserver(tableRef, fn)
 function columnDrop() {
   nextTick(() => {
     //从当前表格对象开始，然后使用对应选择器找dom元素
-    const el = tableRef.value.$el.
-      querySelector('.el-table__header-wrapper tr')
+    const el = tableRef.value.$el.querySelector('.el-table__header-wrapper tr')
     Sortable.create(el, {
       delay: 0,
       animation: 300,
@@ -168,7 +165,6 @@ onMounted(() => {
   }
   //行拖拽
   if (props.draggableRow) {
-
   }
 })
 

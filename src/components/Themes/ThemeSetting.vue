@@ -1,6 +1,15 @@
 <template>
-  <Iconify icon="ri:brush-2-line" class="text-xl mr-2 cursor-pointer" @click="drawer = true"></Iconify>
-  <el-drawer v-model="drawer" title="主题设置" class="min-w-[330px] lt-sm:w-full!" @close="handlerClose">
+  <Iconify
+    icon="ri:brush-2-line"
+    class="text-xl mr-2 cursor-pointer"
+    @click="drawer = true"
+  ></Iconify>
+  <el-drawer
+    v-model="drawer"
+    title="主题设置"
+    class="min-w-[330px] lt-sm:w-full!"
+    @close="handlerClose"
+  >
     <el-form :model="form">
       <!-- 主题颜色 -->
       <el-form-item label="主题颜色">
@@ -54,7 +63,14 @@
       </el-form-item>
       <!-- 菜单宽度 -->
       <el-form-item label="菜单宽度">
-        <el-slider v-model="form.menuWidth" class="ml-3" :max="600" :min="280" show-input input-size="small" />
+        <el-slider
+          v-model="form.menuWidth"
+          class="ml-3"
+          :max="600"
+          :min="280"
+          show-input
+          input-size="small"
+        />
       </el-form-item>
       <!-- 显示Logo -->
       <el-form-item label="显示Logo">
@@ -83,7 +99,7 @@
   </el-drawer>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import Iconify from '../Icon/Iconify.vue'
 import type { ThemeSettingsProps } from './types'
 import { TransitionNameEnum, TRANSITION_NAMES } from './const'
@@ -123,11 +139,11 @@ const handlerClose = () => {
 </script>
 <style lang="scss" scoped>
 :deep(.el-form-item__content) {
-  justify-content: flex-end
+  justify-content: flex-end;
 }
 
 :deep(.nav .el-form-item__label) {
-  justify-content: flex-start
+  justify-content: flex-start;
 }
 
 .item {
@@ -140,4 +156,5 @@ const handlerClose = () => {
 
 // :deep(.el-drawer) {
 //   min-width: 330px;
-// }</style>
+// }
+</style>

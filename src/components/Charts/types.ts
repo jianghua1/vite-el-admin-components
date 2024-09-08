@@ -1,12 +1,16 @@
 import { init } from 'echarts/core'
-import type { SetOptionOpts, EChartsOption } from 'echarts'
+import * as echarts from 'echarts'
+
 import type { CSSProperties } from 'vue'
+import type { SetOptionOpts } from 'echarts'
 
 type InitType = typeof init
 export type InitParameter = Parameters<InitType>
-export type Theme = NotNullable<InitParameter[1]>
-export type InitOptions = NotNullable<InitParameter[2]>
+export type Theme = NonNullable<InitParameter[1]>
+export type InitOptions = NonNullable<InitParameter[2]>
 export type UpdateOptions = SetOptionOpts
+
+export type EChartsOption = echarts.EChartsOption
 
 type AutoresizeProp =
   | boolean
@@ -31,7 +35,7 @@ export type LoadingOptions = {
 }
 
 export interface VEchartsProps {
-  option: typeof EChartsOption
+  option: EChartsOption
   theme: {
     type: Theme
   }

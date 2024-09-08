@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { FormSchema } from "@/components/Form/types";
+import type { FormSchema } from "el-admin-components";
 // import { useForm } from "@/components/Form/useForm";
 import { useForm } from "el-admin-components";
 import type { FormInstance, FormItemInstance } from 'element-plus';
@@ -19,7 +19,6 @@ import { ref } from "vue";
 
 const formRef = ref<FormInstance>()
 const formItemRef = ref<FormItemInstance>()
-
 const schema = ref([
   {
     prop: 'name',

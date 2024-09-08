@@ -1,7 +1,6 @@
 <template>
   <!-- el-menu-item不含子菜单的情况 -->
-  <menu-item :data="data" :collapse="collapse" v-if="!menuHasChildren(data)">
-  </menu-item>
+  <menu-item :data="data" :collapse="collapse" v-if="!menuHasChildren(data)"> </menu-item>
 
   <!-- 左右布局中存在的元素 -->
   <!-- <div class="flex-grow" /> -->
@@ -13,12 +12,17 @@
       <Iconify :icon="data.meta?.icon" :style="iconProps.style" :class="iconProps.class"></Iconify>
       <span>{{ data.meta?.title }}</span>
     </template>
-    <SubMenu v-for="child in data.children" :data="child" v-bind="subAttrs" :key="`${data.path}/${child.path}`">
+    <SubMenu
+      v-for="child in data.children"
+      :data="child"
+      v-bind="subAttrs"
+      :key="`${data.path}/${child.path}`"
+    >
     </SubMenu>
   </el-sub-menu>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { SubMenuProps as ElSubMenuProps } from 'element-plus'
 import { inject } from 'vue'
 import type { AppRouteMenuItem, IconOptions } from './types'
@@ -38,6 +42,5 @@ const subAttrs = computed(() => {
   const { data, ...restProps } = props
   return restProps
 })
-
 </script>
 <style scoped></style>

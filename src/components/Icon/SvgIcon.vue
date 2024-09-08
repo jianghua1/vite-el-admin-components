@@ -8,15 +8,15 @@
 const props = defineProps({
   prefix: {
     type: String,
-    default: 'icon',
+    default: 'icon'
   },
   type: {
     type: String,
-    required: true,
+    required: true
   },
   color: {
     type: String,
-    default: 'currentColor',
+    default: 'currentColor'
   }
 })
 

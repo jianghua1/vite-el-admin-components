@@ -1,16 +1,16 @@
 import type { PaginationProps, TableColumnCtx, TableProps } from 'element-plus'
-
+import type { Component } from 'vue'
 export interface TableColumnType extends Partial<TableColumnCtx<any>> {
   id?: string | number
-  defaultSlot?: typeof Component
-  headerSlot?: typeof Component
+  defaultSlot?: Component
+  headerSlot?: Component
   children?: TableColumnType[]
 }
 
 export interface PaginationType extends Partial<PaginationProps> {
   align?: 'center' | 'left' | 'right'
   total: number
-  defaultSlot?: typeof Component
+  defaultSlot?: Component
 }
 
 export interface VTableProps extends TableProps<any> {

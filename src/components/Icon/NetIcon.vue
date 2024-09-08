@@ -2,7 +2,7 @@
   <i :class="className"></i>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 //格式： fontFamily prefix type
 const props = defineProps({
   url: {

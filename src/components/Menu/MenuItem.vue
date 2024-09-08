@@ -20,9 +20,9 @@
   </template>
 </template>
 
-<script setup lang='ts'>
-import { inject } from 'vue';
-import type { AppRouteMenuItem, IconOptions } from './types';
+<script setup lang="ts">
+import { inject } from 'vue'
+import type { AppRouteMenuItem, IconOptions } from './types'
 import { useMenu } from './useMenu'
 
 interface MenuItemProps {

@@ -1,17 +1,23 @@
 <template>
-  <el-badge :value="value" :max="10000" :style="{
-    // '--tomic-notice-bg-color': color || 'var(--el-color-danger)',
-    '--tomic-notice-font-size': size + 'px'
-  }">
+  <el-badge
+    :value="value"
+    :max="10000"
+    :style="{
+      // '--tomic-notice-bg-color': color || 'var(--el-color-danger)',
+      '--tomic-notice-font-size': size + 'px'
+    }"
+  >
     <slot>
-      <Icon icon="ep:bell" class="text-3xl"
-        :style="{ color: iconColor ?? '#456123', fontSize: iconSize ? `${iconSize}px` : '18px' }" />
+      <Icon
+        icon="ep:bell"
+        class="text-3xl"
+        :style="{ color: iconColor ?? '#456123', fontSize: iconSize ? `${iconSize}px` : '18px' }"
+      />
     </slot>
-
   </el-badge>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { NotificationProps } from './types'
 import { Icon } from '@iconify/vue'
 //初始化组件参数

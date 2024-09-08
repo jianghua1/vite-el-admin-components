@@ -8,11 +8,9 @@ import { CanvasRenderer } from 'echarts/renderers'
 import * as Charts from 'echarts/charts'
 import * as ChartsComponents from 'echarts/components'
 import * as ChartsFeatures from 'echarts/features'
-import VChart from "vue-echarts"
-import type { VueEchartsProps } from "./types"
-import { CHARTS_MAP, COMPONENTS_MAP } from "./const"
-
-
+import VChart from 'vue-echarts'
+import type { VueEchartsProps } from './types'
+import { CHARTS_MAP, COMPONENTS_MAP } from './const'
 
 const props = withDefaults(defineProps<VueEchartsProps>(), {
   autoresize: true,
@@ -40,9 +38,9 @@ if (import.meta.env.MODE !== 'production') {
   onBeforeMount(() => {
     let deps: string[] = []
     if (props.option) {
-      Object.keys(props.option).forEach(key => {
+      Object.keys(props.option).forEach((key) => {
         if (COMPONENTS_MAP[key]) {
-          deps.push(COMPONENTS_MAP[key]);
+          deps.push(COMPONENTS_MAP[key])
         }
       })
     }
@@ -64,11 +62,12 @@ if (import.meta.env.MODE !== 'production') {
     }
     use([
       CanvasRenderer,
-      Charts[CHARTS_MAP[type]], ...deps.map((o) => ChartsComponents[o]), ...features.map(f => ChartsFeatures[f])
+      Charts[CHARTS_MAP[type]],
+      ...deps.map((o) => ChartsComponents[o]),
+      ...features.map((f) => ChartsFeatures[f])
     ])
   })
 }
-
 </script>
 
 <style scoped></style>

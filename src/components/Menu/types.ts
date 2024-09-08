@@ -1,9 +1,10 @@
 import type { IconifyIcon } from '@iconify/vue'
+import type { CSSProperties, Component } from 'vue'
 
-export type Component<T = any> =
-  | ReturnType<typeof defineComponent>
-  | (() => Promise<T>)
-  | (() => Promise<typeof import('*.vue')>)
+// export type Component<T = any> =
+//   | ReturnType<typeof defineComponent>
+//   | (() => Promise<T>)
+//   | (() => Promise<typeof import('*.vue')>)
 
 export interface AppRouteMenuItem {
   // 菜单名（别名）
@@ -37,8 +38,8 @@ export interface IconOptions {
 export type EmitSelectType = [
   index: string,
   indexPath: string[],
-  item: MenuItemClicked,
-  routeResult?: Promise<void | NavigationFailure>
+  item: any,
+  routeResult?: Promise<void | any>
 ]
 
 export type OpenCloseType = [index: string, indexPath: string[]]

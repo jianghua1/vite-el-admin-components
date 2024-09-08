@@ -1,8 +1,18 @@
 <template>
   <div class="flex justify-between items-center px-2">
-    <el-tabs type="card" class="myTabs overflow-hidden flex-1" closable v-on="forwardEvents" v-model="modelValue">
-      <el-tab-pane :name="item?.name as string" v-for="item in data" :key="item.name as string"
-        :label="item.meta && item.meta?.title"></el-tab-pane>
+    <el-tabs
+      type="card"
+      class="myTabs overflow-hidden flex-1"
+      closable
+      v-on="forwardEvents"
+      v-model="modelValue"
+    >
+      <el-tab-pane
+        :name="item?.name as string"
+        v-for="item in data"
+        :key="item.name as string"
+        :label="item.meta && item.meta?.title"
+      ></el-tab-pane>
     </el-tabs>
     <DropDown :items="items" class="w-6" @change="handleClick">
       <template #header>
@@ -15,11 +25,11 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { TabsProps, TabsPaneContext } from 'element-plus'
 import type { AppRouteMenuItem } from '../Menu/types'
 import { forwardEventsUtils } from '../../utils/format'
-import { TabActions } from './types.d.ts'
+import { TabActions } from './types'
 
 interface HeaderTabsProps extends Partial<TabsProps> {
   data: AppRouteMenuItem[]
@@ -66,11 +76,13 @@ const items = ref([
     action: TabActions.closeLeft,
     icon: 'line-md:arrow-close-left',
     text: '关闭左侧'
-  }, {
+  },
+  {
     action: TabActions.closeRight,
     icon: 'line-md:arrow-close-right',
     text: '关闭右侧'
-  }, {
+  },
+  {
     action: TabActions.closeAll,
     icon: 'codicon:close-all',
     text: '关闭全部'

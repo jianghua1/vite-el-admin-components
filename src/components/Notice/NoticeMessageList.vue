@@ -6,8 +6,12 @@
       <ul v-if="tab.contents && tab.contents.length">
         <li v-for="(content, index2) in tab.contents" :key="index2">
           <el-row justify="center" align="middle" class="hover:bg-blue-200 py-2">
-            <el-col :span="4" align="middle" @click="() => handleClickAvatar(content.avatar! as AvatarProps)"
-              v-if="content.avatar">
+            <el-col
+              :span="4"
+              align="middle"
+              @click="() => handleClickAvatar(content.avatar! as AvatarProps)"
+              v-if="content.avatar"
+            >
               <!-- 头像 -->
               <el-avatar v-bind="Object.assign({ size: 'small' }, content.avatar)" />
             </el-col>
@@ -18,8 +22,14 @@
                 <div class="text-base line-clamp-1">
                   {{ content.title }}
                 </div>
-                <el-tag v-if="content.tag" type="danger" size="small" class="ml-2" v-bind="content.tagProps">{{
-                  content.tag }}</el-tag>
+                <el-tag
+                  v-if="content.tag"
+                  type="danger"
+                  size="small"
+                  class="ml-2"
+                  v-bind="content.tagProps"
+                  >{{ content.tag }}</el-tag
+                >
               </el-row>
               <el-row v-if="content.content">
                 <!-- 消息正文 -->
@@ -39,20 +49,28 @@
   </el-tabs>
   <!-- buttons -->
   <div class="flex w-full justify-around border-t">
-    <div class="py-3 border-r flex-1 flex justify-center items-center hover:bg-sky-200 cursor-pointer"
-      v-for="(action, index) in actions" :key="index" @click="action.click">
-      <Iconify v-if="action.icon" :icon="action.icon" :color="action.color" :style="action.style"></Iconify>
+    <div
+      class="py-3 border-r flex-1 flex justify-center items-center hover:bg-sky-200 cursor-pointer"
+      v-for="(action, index) in actions"
+      :key="index"
+      @click="action.click"
+    >
+      <Iconify
+        v-if="action.icon"
+        :icon="action.icon"
+        :color="action.color"
+        :style="action.style"
+      ></Iconify>
       <span class="ml-2">{{ action.title }}</span>
     </div>
   </div>
 </template>
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { TabsPaneContext } from 'element-plus'
 
 import type { AvatarProps } from 'element-plus'
 import type { MessageListItem, NoticeMessageListProps } from './types'
 // import { Iconify } from '../Icon/Iconify.vue';
-
 
 const props = defineProps<NoticeMessageListProps>()
 //事件传递

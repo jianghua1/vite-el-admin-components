@@ -1,5 +1,11 @@
 <template>
-  <el-popover v-if="row && Object.keys(row).length" effect="light" trigger="hover" placement="top" width="auto">
+  <el-popover
+    v-if="row && Object.keys(row).length"
+    effect="light"
+    trigger="hover"
+    placement="top"
+    width="auto"
+  >
     <template #default>
       <div>name: {{ row.name }}</div>
       <div>address: {{ row.address }}</div>
@@ -8,10 +14,9 @@
       <el-tag>{{ row.name }}</el-tag>
     </template>
   </el-popover>
-
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 defineProps({
   row: {
     type: Object,
@@ -25,6 +30,5 @@ definePage({
     order: 120
   }
 })
-
 </script>
 <style scoped></style>

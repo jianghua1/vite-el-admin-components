@@ -1,9 +1,13 @@
 <template>
-  <el-switch v-model="isDark" :active-action-icon="Moon" :inactive-action-icon="Sunny"
-    style="--el-switch-on-color:#333" />
+  <el-switch
+    v-model="isDark"
+    :active-action-icon="Moon"
+    :inactive-action-icon="Sunny"
+    style="--el-switch-on-color: #333"
+  />
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 const props = defineProps({
   dark: {
     type: Boolean,
@@ -13,12 +17,14 @@ const props = defineProps({
 
 const emits = defineEmits(['change'])
 
-const Moon = () => h('i', {
-  class: 'i-prime-moon'
-})
-const Sunny = () => h('i', {
-  class: 'i-octicon-sun-24'
-})
+const Moon = () =>
+  h('i', {
+    class: 'i-prime-moon'
+  })
+const Sunny = () =>
+  h('i', {
+    class: 'i-octicon-sun-24'
+  })
 const isDark = useStorage('dark-mode-flag', props.dark)
 // 在页面加载时设置为浅色主题
 const preferredDark = usePreferredDark()
@@ -31,14 +37,18 @@ function toggleMode(flag: boolean) {
   }
 }
 
-watch(isDark, () => {
-  nextTick(() => {
-    toggleMode(isDark.value)
-    emits('change', isDark)
-  })
-}, {
-  immediate: true
-})
+watch(
+  isDark,
+  () => {
+    nextTick(() => {
+      toggleMode(isDark.value)
+      emits('change', isDark)
+    })
+  },
+  {
+    immediate: true
+  }
+)
 
 watch(preferredDark, () => {
   nextTick(() => {
@@ -47,6 +57,5 @@ watch(preferredDark, () => {
     isDark.value = preferredDark.value
   })
 })
-
 </script>
 <style scoped></style>

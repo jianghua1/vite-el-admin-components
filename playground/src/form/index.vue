@@ -12,16 +12,10 @@
 
 <script setup lang='ts'>
 import type { FormSchema } from "@/components/Form/types";
-import { useForm } from "@/components/Form/useForm";
+// import { useForm } from "@/components/Form/useForm";
+import { useForm } from "el-admin-components";
 import type { FormInstance, FormItemInstance } from 'element-plus';
-
-definePage({
-  meta: {
-    title: '基础表单',
-    icon: 'mdi:message',
-    order: 110
-  }
-})
+import { ref } from "vue";
 
 const formRef = ref<FormInstance>()
 const formItemRef = ref<FormItemInstance>()

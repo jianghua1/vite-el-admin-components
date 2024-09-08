@@ -16,6 +16,7 @@ const mainFilePath = getPath('src/main.ts')
 let componentExports = ''
 let pluginContentLines = []
 let components = []
+let hooksExports = ''
 
 function walkDir(dir) {
   //读取当前目录中所有的文件
@@ -44,7 +45,11 @@ function walkDir(dir) {
             componentName = `V${baseName}`
           }
           //app.use('xxx',xxx)
-          pluginContentLines.push(` app.component('${componentName}',${componentName}) `)
+          pluginContentLines.push(` app.component('${componentName}',${baseName}) `)
+        }
+
+        if (extension === '.ts' && baseName.startsWith('use')) {
+          hooksExports += `export {${baseName}} from '${importPath}';\n`
         }
       }
     }
@@ -74,5 +79,5 @@ export default globalPlugin
 export {${components.join(', ')}}
 `
 
-mainFileContent += '\n' + `${componentExports}\n${pluginContent}`
+mainFileContent += '\n' + `${componentExports}\n${pluginContent}\n${hooksExports}`
 fs.writeFileSync(mainFilePath, mainFileContent)

@@ -1,23 +1,20 @@
-import type { FormProps } from './types'
+import type { FormSchema } from './types'
 
-export function useForm(props: FormProps) {
+export function useForm(schema: FormSchema) {
   const model = ref<any>()
-  const localRules = ref<any>()
-
-  const isUpdatingInternalModel = ref(false)
-  const internalModel = ref<any>({})
+  const rules = ref<any>()
 
   onBeforeMount(() => {
-    model.value = setForm(props.schema || [])
+    model.value = setForm(schema || [])
+    rules.value = setRules(schema || [])
   })
-  function setForm(arr: any[], level = 0) {
+
+  function setForm(arr: any[], level = 0): any {
     const obj = {}
     let i = 0
     arr.forEach((item) => {
-      if (!item.prop) {
-        item.prop = `form${level}-${i}`
-      }
-      if (item.value) {
+      if (!item.prop) item.prop = `form${level}-${i}`
+      if (item.value || item.value === '' || item.value === false) {
         obj[item.prop] = item.value
       } else if (item.schema && item.schema.length) {
         obj[item.prop] = setForm(item.schema, level + 1)
@@ -29,7 +26,7 @@ export function useForm(props: FormProps) {
     return obj
   }
 
-  function setRules(arr: any[]) {
+  function setRules(arr: any[]): any {
     let formRules = {}
     arr.forEach((item) => {
       if (item.prop && item.rules) {
@@ -45,78 +42,23 @@ export function useForm(props: FormProps) {
   function flatObj(obj) {
     let result = {}
     if (typeof obj !== 'object') return result
-    for (const key in obj) {
-      if (
-        typeof obj[key] === 'object' &&
-        !Array.isArray(obj[key]) &&
-        Object.keys(obj[key]).length
-      ) {
+
+    for (let key in obj) {
+      if (typeof obj[key] === 'object' && !Array.isArray(obj[key]) && Object.keys(obj[key]).length)
         result = { ...result, ...flatObj(obj[key]) }
-      } else {
+      else {
         if (!key.startsWith('form')) {
           result[key] = obj[key]
         }
       }
     }
-
     return result
   }
 
-  // 初始化schema 变化来更新internalModel
-  watch(
-    () => props.schema,
-    (newSchema) => {
-      if (!newSchema) return
-      const newModel = setForm(newSchema)
-      localRules.value = setRules(props.schema || [])
-      isUpdatingInternalModel.value = true
-      internalModel.value = newModel
-      nextTick(() => {
-        isUpdatingInternalModel.value = false
-      })
-    },
-    {
-      deep: true,
-      immediate: true
-    }
-  )
-
-  watch(
-    model,
-    (newValue) => {
-      if (!isUpdatingInternalModel.value) {
-        // isUpdatingInternalModel - false
-        // 说明model的更新来自外侧
-        isUpdatingInternalModel.value = true
-        internalModel.value = newValue
-        nextTick(() => {
-          isUpdatingInternalModel.value = false
-        })
-      }
-    },
-    {
-      deep: true
-    }
-  )
-
-  watch(
-    internalModel,
-    (newModel) => {
-      if (!isUpdatingInternalModel.value) {
-        model.value = newModel
-      }
-    },
-    {
-      deep: true
-    }
-  )
-
   return {
     model,
-    internalModel,
-    rules: localRules,
+    rules,
     setForm,
-    setRules,
     formValue: computed(() => flatObj(model.value))
   }
 }

@@ -1,101 +1,51 @@
 <template>
-  <el-tabs v-model="activeName">
-    <el-tab-pane label="登录" name="sign">
-      <!-- form -->
-      <el-form :model="form" class="min-w-[450px]" :rules="rules" ref="formRef">
-        <el-form-item prop="username">
-          <el-input v-model="form.username" :placeholder="$t('pages.login.username')"
-            :prefix-icon="getIcon('ep:user')" />
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input type="password" v-model="form.password" :placeholder="$t('pages.login.password')"
-            :prefix-icon="getIcon('ep:lock')" />
-        </el-form-item>
-        <el-row class="items-center justify-between">
-          <el-form-item>
-            <el-checkbox :label="$t('pages.login.remember')" v-model="form.remember" name="type" />
-          </el-form-item>
-          <!-- <el-link type="primary">{{ $t('pages.login.sign-up') }}</el-link> -->
-        </el-row>
-        <el-form-item>
-          <!-- 登录 -->
-          <el-button type="primary" @click="onSubmit" class="w-full mt-4">{{
-            $t('pages.login.submit')
-            }}</el-button>
-        </el-form-item>
-      </el-form>
-      <!-- 第三方登录 -->
-      <el-divider direction="horizontal" class="mt-10">
-        <span class="text-gray-500">其他登录方式</span>
-      </el-divider>
-      <div class="flex justify-around">
-        <Iconify class="text-2xl text-gray-400 cursor-pointer hover:text-[var(--el-color-primary)]" :icon="item.icon"
-          v-for="(item, index) in loginItems" :key="index" @click="handleClickItem(item)"></Iconify>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="注册" name="reg">
-      <!-- form -->
-      <el-form :model="form" class="min-w-[450px]" :rules="rules" ref="formRef1">
-        <el-form-item prop="username">
-          <el-input v-model="form.username" :placeholder="$t('pages.login.username')"
-            :prefix-icon="getIcon('ep:user')" />
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input type="password" v-model="form.password" :placeholder="$t('pages.login.password')"
-            :prefix-icon="getIcon('ep:lock')" />
-        </el-form-item>
-        <el-form-item prop="repassword">
-          <el-input type="password" v-model="form.repassword" :placeholder="$t('pages.login.repassword')"
-            :prefix-icon="getIcon('ep:lock')" />
-        </el-form-item>
-        <el-form-item prop="phone">
-          <el-input v-model="form.phone" :placeholder="$t('pages.login.phone')" :prefix-icon="getIcon('ep:phone')" />
-        </el-form-item>
-        <el-form-item prop="code">
-          <el-row class="flex-nowrap w-full">
-            <el-input class="flex-1 mr-3" v-model="form.code" :placeholder="$t('pages.login.code')"
-              :prefix-icon="getIcon('ep:message')" />
-            <el-button type="primary">发送验证码</el-button>
-          </el-row>
-        </el-form-item>
-        <el-form-item>
-          <!-- 注册 -->
-          <el-button type="primary" @click="onReg" class="w-full mt-8">
-            {{ $t('pages.login.sign-up') }}
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </el-tab-pane>
-  </el-tabs>
+  <!-- <div class="self-center bg-white shadow rounded p-4"> -->
+  <!-- title -->
+  <!-- <div class="text-2xl mb-10"> {{ title }}</div> -->
+  <!-- 表单 -->
+  <el-form :model="form" class="min-w-[450px]" :rules="rules" ref="formRef">
+    <el-form-item prop="username" trim>
+      <el-input v-model="form.username" placeholder="请输入手机号/账号" :prefix-icon="getIcon('ep:user')" />
+    </el-form-item>
+    <el-form-item prop="password" trim>
+      <el-input v-model="form.password" placeholder="请输入密码" :prefix-icon="getIcon('ep:lock')" type="password" />
+    </el-form-item>
+    <el-form-item prop="repassword" trim>
+      <el-input v-model="form.repassword" placeholder="请再次输入密码" :prefix-icon="getIcon('ep:lock')" type="password" />
+    </el-form-item>
+    <el-row class="items-center justify-between">
+      <el-form-item prop="remeber">
+        <el-checkbox label="记住账号" name="type" v-model="form.remeber"></el-checkbox>
+      </el-form-item>
+      <el-link type="primary">注册账号</el-link>
+    </el-row>
+    <!-- 登录 -->
+    <el-form-item>
+      <el-button type="primary" class="w-full mt-4" @click="onSubmit()">登录</el-button>
+    </el-form-item>
+  </el-form>
+  <!-- 第三方登录 -->
+  <!-- 第三方登录的做法就是贴图标，然后图标上绑定跳转连接就可以了 -->
+  <el-divider direction="horizontal" class="mt-10">
+    <span class="text-gray-500">其他登录方式</span>
+  </el-divider>
+  <div class="flex justify-around">
+    <Iconify :icon="item.icon" class="cursor-pointer text-2xl text-gray-200 hover:text-sky-500"
+      v-for="(item, index) in loginItems" :key="index" @click="handleClickItem(item)"></Iconify>
+  </div>
+  <!-- </div> -->
 </template>
 
-<script setup lang="tsx">
+<script setup lang='tsx'>
 import Iconify from '../Icon/Iconify.vue'
-import type { LoginFormProps, LoginItem } from './types'
-import type { FormRules } from 'element-plus'
-import { ref } from 'vue'
+import type { LoginFormInterface, LoginFormProps, LoginItem } from './types';
+import type { FormInstance, FormRules } from 'element-plus'
 
 withDefaults(defineProps<LoginFormProps>(), {
-  title: 'pages.login.welcome'
+
 })
 
-const activeName = ref('sign')
-
-const formRef = ref()
-const formRef1 = ref()
-
-const emits = defineEmits(['clickIcon', 'submit', 'reg'])
-
-interface LoginFormInterface {
-  username: string
-  password: string
-  repassword: string
-  phone: number | string
-  email: string
-  code: string
-  remember: boolean
-}
-
+const formRef = ref<FormInstance>()
 const form = reactive<LoginFormInterface>({
   username: '',
   password: '',
@@ -103,118 +53,80 @@ const form = reactive<LoginFormInterface>({
   phone: '',
   email: '',
   code: '',
-  remember: false
+  remeber: false
 })
-
-const validatePass = useDebounceFn((rule: any, value: any, callback: any) => {
-  if (value.trim() === '') {
-    callback(new Error('请输入密码'))
-  } else if (value !== form.repassword) {
-    callback(new Error('两次输入的密码不一致'))
-  } else {
-    // if (ruleForm.checkPass !== '') {
-    if (!formRef.value) return
-    formRef.value.validateField('repassword', () => null)
-    callback()
-  }
-}, 200)
-
-const validatePass2 = useDebounceFn((rule: any, value: any, callback: any) => {
-  if (value.trim() === '') {
-    callback(new Error('请再次输入密码'))
-  } else if (value !== form.password) {
-    callback(new Error('两次输入的密码不一致'))
-  } else {
-    if (!formRef.value) return
-    formRef.value.validateField('password', () => null)
-    callback()
-  }
-}, 300)
 
 const rules = reactive<FormRules<LoginFormInterface>>({
   username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
     {
-      required: true,
-      message: '用户名不得为空'
-    },
-    {
-      min: 6,
-      max: 16,
-      message: '用户名格式不正确，最小6位，最长16位'
+      min: 6, max: 16, message: '用户名的长度在6-10位之间', trigger: 'blur'
     }
   ],
   password: [
-    {
-      min: 6,
-      max: 32,
-      message: '请输入密码，最小6位，最长32位'
-    },
-    {
-      asyncValidator: validatePass,
-      trigger: ['change', 'blur']
-    }
+    { required: true, message: '请输入密码', trigger: ['blur', 'change'] },
+    { min: 6, max: 32, message: '密码最少6位', trigger: ['blur', 'change'] }
   ],
   repassword: [
-    {
-      min: 6,
-      max: 32,
-      message: '请再次输入密码'
-    },
-    {
-      asyncValidator: validatePass2,
-      trigger: ['change', 'blur']
-    }
+    { required: true, message: '请再次输入密码', trigger: ['blur', 'change'] },
+    { validator: (rule: any, value: string) => value === form.password, message: '两次输入的密码不一致', trigger: ['blur'] }
   ],
   phone: [
-    {
-      required: true,
-      message: '手机号不得为空'
-    },
-    {
-      pattern: /^1[3456789]\d{9}$/,
-      message: '请输入正确的手机号'
-    }
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { pattern: /^1\d{10}$/, message: '请输入正确的手机号', trigger: 'blur' }
+  ],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, message: '请输入正确的邮箱', trigger: 'blur' }
   ],
   code: [
-    {
-      required: true,
-      message: '验证码不得为空'
-    },
-    {
-      pattern: /^\d{6}$/,
-      message: '验证码只能为6位数字',
-      trigger: ['change', 'blur']
-    }
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
+  ],
+  remeber: [
+    { type: 'boolean', required: true, message: '请记住账号', trigger: 'change' }
   ]
 })
 
+const onSubmit = (form: any) => {
+  if (formRef.value) {
+    formRef.value.validate((valid: any) => {
+      if (valid)
+        emits('submit', form)
+    })
+  }
+}
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      console.log('submit!')
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
+}
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.resetFields()
+}
+
+const emits = defineEmits(['clickIcon', 'submit'])
+
 function getIcon(icon: string) {
-  return () => <Iconify icon={icon}></Iconify>
+  return () => <Iconify icon={icon} > </Iconify>
 }
 
 const handleClickItem = (item: LoginItem) => {
+  // window.open(url)
   emits('clickIcon', item.url)
 }
 
-const onSubmit = () => {
-  if (formRef.value) {
-    formRef.value.validate((valid: any) => {
-      if (valid) {
-        emits('submit', form)
-      }
-    })
-  }
-}
-
-const onReg = () => {
-  if (formRef1.value) {
-    formRef1.value.validate((valid: any) => {
-      if (valid) {
-        emits('reg', form)
-      }
-    })
-  }
-}
 </script>
-
-<style scoped></style>
+<style lang="scss" scoped>
+:deep(.el-form-item__content) {
+  margin-left: 0px !important;
+}
+</style>

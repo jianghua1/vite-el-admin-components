@@ -12,7 +12,11 @@ const getPath = (name) => path.join(basePath, name)
 //定义组件所在目录
 const componentsDir = getPath('src/components')
 const mainFilePath = getPath('src/main.ts')
+
 let componentExports = ''
+let pluginContentLines = []
+let components = []
+
 function walkDir(dir) {
   //读取当前目录中所有的文件
   const files = fs.readdirSync(dir)
@@ -33,7 +37,14 @@ function walkDir(dir) {
           .replace(/\\/g, '/')}`
 
         if (extension === '.vue') {
-          componentExports += `export { default as ${baseName} } from '${importPath}';\n`
+          componentExports += `import ${baseName} from '${importPath}';\n`
+          components.push(baseName)
+          let componentName = baseName
+          if (['Menu', 'Header', 'Form', 'Table'].includes(baseName)) {
+            componentName = `V${baseName}`
+          }
+          //app.use('xxx',xxx)
+          pluginContentLines.push(` app.component('${componentName}',${componentName}) `)
         }
       }
     }
@@ -51,5 +62,17 @@ if (markerIndex !== -1) {
 } else {
   mainFileContent += '\n' + appendMarker
 }
-mainFileContent += '\n' + componentExports
+
+const pluginContent = `
+export const globalPlugin = {
+  install(app:any) {
+    ${pluginContentLines.join('\n')}
+  }
+}
+
+export default globalPlugin
+export {${components.join(', ')}}
+`
+
+mainFileContent += '\n' + `${componentExports}\n${pluginContent}`
 fs.writeFileSync(mainFilePath, mainFileContent)

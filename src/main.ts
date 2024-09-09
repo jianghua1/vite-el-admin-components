@@ -1,6 +1,8 @@
 import '@unocss/reset/tailwind-compat.css'
 import 'virtual:uno.css'
 //export * from './components-types'
+import { setupDirectives } from './directives'
+export { setupDirectives }
 // append-by-scripts
 import AvatarList from './components/Avatar/AvatarList.vue'
 import AvatarMenu from './components/Avatar/AvatarMenu.vue'
@@ -36,6 +38,9 @@ import ThemeSetting from './components/Themes/ThemeSetting.vue'
 
 export const globalPlugin = {
   install(app: any) {
+    //指令全局加载
+    setupDirectives(app)
+    //组件全局加载
     app.component('AvatarList', AvatarList)
     app.component('AvatarMenu', AvatarMenu)
     app.component('VueEcharts', VueEcharts)

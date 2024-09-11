@@ -1,10 +1,10 @@
+import { useRoute } from 'vue-router'
 import type { AppRouteMenuItem } from './types'
-import path from 'path'
 
 export function useMenu() {
   function filterAndOrderMenus(menus: AppRouteMenuItem[]) {
     menus.forEach((item) => {
-      if (item.children && Array.isArray(item.children) && item.children.length > 0) {
+      if (item.children && item.children.length > 0) {
         item.children = filterAndOrderMenus(item.children)
       }
       item.meta = {
@@ -22,20 +22,18 @@ export function useMenu() {
       })
       .map((item) => ({ ...item }))
   }
-  function generateMenuKeys(menus: AppRouteMenuItem[], level = '0') {
-    //过滤被隐藏的菜单
+
+  function generateMenuKeys(menus: AppRouteMenuItem[], level = '1') {
     const filteredMenus = filterAndOrderMenus(menus)
     let i = 1
     filteredMenus.forEach((item) => {
-      //通过index中是否存在-来判断是否是第一级菜单
-      const key = level.indexOf('-') !== -1 ? `${level}-${i}` : `${i}`
-
+      const key = level.indexOf('-') !== -1 ? `${level}${i}` : `${i}`
       item.meta = {
         ...item.meta,
         key
       }
       i++
-      //如存在子菜单，则递归调用当前方法
+
       if (item.children && item.children.length > 0) {
         return (item.children = generateMenuKeys(item.children, `${key}-`))
       }
@@ -43,14 +41,13 @@ export function useMenu() {
     return filteredMenus
   }
 
-  function getItemCondition(menus: AppRouteMenuItem[], fn: (ietm: AppRouteMenuItem) => boolean) {
+  function getItemCondition(menus: AppRouteMenuItem[], fn: (item: AppRouteMenuItem) => boolean) {
     for (let i = 0; i < menus.length; i++) {
-      const menu = menus[i]
-      if (fn(menu)) {
-        return menu
+      if (fn(menus[i])) {
+        return menus[i]
       } else {
-        if (menu.children && Array.isArray(menu.children) && menu.children.length > 0) {
-          const item = getItemCondition(menu.children!, fn) as AppRouteMenuItem | undefined
+        if (menus[i].children && Array.isArray(menus[i].children)) {
+          const item = getItemCondition(menus[i].children!, fn) as AppRouteMenuItem | undefined
           if (item) {
             return item
           }
@@ -61,12 +58,11 @@ export function useMenu() {
 
   function getItem(menus: AppRouteMenuItem[], index: string) {
     // for (let i = 0; i < menus.length; i++) {
-    //   const menu = menus[i]
-    //   if (menu.meta?.key === index) {
-    //     return menu
+    //   if (menus[i].meta?.key === index) {
+    //     return menus[i]
     //   } else {
-    //     if (menu.children && Array.isArray(menu.children) && menu.children.length > 0) {
-    //       const item = getItem(menu.children!, index) as AppRouteMenuItem | undefined
+    //     if (menus[i].children && Array.isArray(menus[i].children)) {
+    //       const item = getItem(menus[i].children!, index) as AppRouteMenuItem | undefined
     //       if (item) {
     //         return item
     //       }
@@ -76,10 +72,7 @@ export function useMenu() {
     return getItemCondition(menus, (item) => item.meta?.key === index)
   }
 
-  /**
-   * 获取顶级菜单
-   * @param menus
-   */
+  // 获取顶部菜单
   function getTopMenus(menus: AppRouteMenuItem[]) {
     const filteredMenus = filterAndOrderMenus(menus)
     return filteredMenus.map((item) => {
@@ -87,28 +80,28 @@ export function useMenu() {
       return item
     })
   }
-  /**
-   * 获取子菜单
-   * @param menus
-   */
+
+  // 获取子菜单
   function getSubMenus(menus: AppRouteMenuItem[]) {
-    //获取菜单的路由
     const route = useRoute()
     const path = computed(() => {
-      if (route.path === '/') return '/'
-      const rootPath = route.path.split('/')[1] ?? '/'
-      return rootPath ? `/${rootPath}` : '/'
+      let rootPath = '/'
+      if (route) {
+        if (route.path === '/') return '/'
+        rootPath = route.path.split('/')[1]
+      }
+      return rootPath
     })
     const filteredMenus = filterAndOrderMenus(menus)
-    return filteredMenus.find((menu) => menu.path === path.value)?.children || []
+    return filteredMenus.find((item) => item.path === path.value)?.children || []
   }
-  /**
-   * 获取当前菜单的父级菜单
-   * @param menus
-   */
+
+  // 获取当前需要open的子菜单信息
   function getParentMenu(menus: AppRouteMenuItem[]): AppRouteMenuItem | undefined {
-    //获取菜单的路由
     const route = useRoute()
+    if (!route) {
+      return [] as AppRouteMenuItem
+    }
     const path = computed(() => route.path)
     return getItemCondition(menus, (item) => {
       const arr = path.value.split('/')
@@ -123,16 +116,16 @@ export function useMenu() {
   }
 
   function menuHasChildren(item: AppRouteMenuItem): boolean {
-    //有子菜单的判断：当前菜单没有被隐藏，当前菜单的children属性是数组，并且数组内容不为空
     return !item.meta?.hideMenu && Array.isArray(item.children) && item.children.length > 0
   }
-  //是将函数名称暴漏出去
+
   return {
     generateMenuKeys,
-    getTopMenus,
-    getSubMenus,
     getItem,
     getParentMenu,
+    filterAndOrderMenus,
+    getSubMenus,
+    getTopMenus,
     getIndex,
     menuHasChildren
   }

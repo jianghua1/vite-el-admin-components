@@ -1,6 +1,8 @@
-import type { PaginationProps, TableColumnCtx, TableProps } from 'element-plus'
+import type { PaginationProps, TableProps as EPTableProps, TableColumnCtx } from 'element-plus'
 import type { Component } from 'vue'
-export interface TableColumnType extends Partial<TableColumnCtx<any>> {
+
+// 做一个类型的alias
+export interface TableColumnType extends Omit<Partial<TableColumnCtx<any>>, 'children' | 'id'> {
   id?: string | number
   defaultSlot?: Component
   headerSlot?: Component
@@ -13,14 +15,19 @@ export interface PaginationType extends Partial<PaginationProps> {
   defaultSlot?: Component
 }
 
-export interface VTableProps extends TableProps<any> {
+export interface TableProps extends EPTableProps<any> {
   columns: TableColumnType[]
   pagination?: PaginationType
-  adaptive?: boolean | number
+  adaptive?: boolean | number // offset
+  // loading
   loading?: boolean
-  //列拖拽开关
+  elementLoadingText?: string
+  elementLoadingSpinner?: string
+  elementLoadingSvgViewBox?: string
+  elementLoadingBackground?: string
+  elementLoadingSvg?: string
+  // drag
   draggableCol?: boolean
-  //行拖拽开关
   draggableRow?: boolean
 }
 
@@ -46,6 +53,7 @@ export type TableEventsType = {
 }
 
 type PaginationCallFunc = (value: number) => void
+
 export type PaginationEventsType = {
   'page-size-change': [PaginationCallFunc]
   'page-current-change': [PaginationCallFunc]
@@ -53,4 +61,9 @@ export type PaginationEventsType = {
   'page-next-click': [PaginationCallFunc]
 }
 
-export type TableEmitsType = TableEventsType & PaginationEventsType
+type TableExtendEvents = {
+  'drag-row-change': [row: any]
+  'drag-col-change': [cols: any]
+}
+
+export type TableEmitsType = TableEventsType & PaginationEventsType & TableExtendEvents

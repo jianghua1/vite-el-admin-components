@@ -17,24 +17,22 @@
       :data="menu"
       :collapse="collapse"
       v-bind="subMenuProps"
-    >
-    </sub-menu>
+    ></sub-menu>
   </el-menu>
 </template>
+
 <script setup lang="ts">
 import type { MenuProps as ElMenuProps, SubMenuProps } from 'element-plus'
-import type { AppRouteMenuItem, EmitSelectType, IconOptions, OpenCloseType } from './types'
-import type { NavigationFailure } from 'vue-router'
-
+import type { AppRouteMenuItem, MenuSelectEvent, IconOptions, MenuOpenCloseEvent } from './types'
 import { useMenu } from './useMenu'
-import { isDefined } from '@vueuse/core'
-import { provide } from 'vue'
+import { type RouteLocationNormalizedLoaded } from 'vue-router'
 
 interface MenuProps extends Partial<ElMenuProps> {
   data: AppRouteMenuItem[]
   subMenuProps?: Partial<SubMenuProps>
   iconProps?: Partial<IconOptions>
 }
+
 const props = withDefaults(defineProps<MenuProps>(), {
   data: () => [],
   iconProps: () => ({
@@ -44,7 +42,7 @@ const props = withDefaults(defineProps<MenuProps>(), {
   backgroundColor: 'transparent',
   ellipsis: true
 })
-//当折叠时，iconProps中的样式要发生改变
+
 const iconProps = reactive(props.iconProps)
 const menuRef = ref()
 
@@ -55,24 +53,25 @@ watch(
   }
 )
 
-//初始化根组件的iconProps（icon的样式）
-provide('iconProps', props.iconProps)
+provide('iconProps', iconProps)
+
+const emits = defineEmits<{
+  select: [item: AppRouteMenuItem]
+  open: [arg: MenuOpenCloseEvent]
+  close: [arg: MenuOpenCloseEvent]
+}>()
 
 const slots = useSlots()
-
 const { generateMenuKeys, getItem, getParentMenu } = useMenu()
 
-const fileredMenus = computed(() => {
-  return generateMenuKeys(props.data)
-})
-
+const fileredMenus = computed(() => generateMenuKeys(props.data))
 const menuProps = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { subMenuProps, data, ...restProps } = props
   return restProps
 })
 
 onMounted(() => {
-  //获取父亲的菜单数据模型
   const item = getParentMenu(fileredMenus.value)
   if (item && item.meta && item.meta.key) {
     if (menuRef.value && menuRef.value.open) {
@@ -81,42 +80,45 @@ onMounted(() => {
   }
 })
 
-const emits = defineEmits<{
-  select: [item: AppRouteMenuItem]
-  open: OpenCloseType
-  close: OpenCloseType
-}>()
-
-const handleOpen = (...args: OpenCloseType) => {
-  emits('open', ...args)
-}
-
-const handleClose = (...args: OpenCloseType) => {
-  emits('close', ...args)
-}
-
-const handleSelect = (...args: EmitSelectType) => {
-  const [index] = args
-  const item = getItem(fileredMenus.value, index)
-  if (!item) return
-  emits('select', item)
-}
-
-const getDefaultActive = (route: AppRouteMenuItem) => {
+function getDefaultActive(route: RouteLocationNormalizedLoaded) {
   let key = ''
 
   const findKey = (menus: AppRouteMenuItem[]) => {
     menus.forEach((item) => {
-      if (item.name == route.name) key = item.meta?.key as string
-      if (item.children) findKey(item.children)
+      if (item.name === route.name) {
+        key = item.meta?.key as string
+      }
+      if (item.children) {
+        findKey(item.children)
+      }
     })
   }
+
   findKey(fileredMenus.value)
+
   return key
 }
+
+const handleSelect = (...args: MenuSelectEvent) => {
+  const [index] = args
+
+  const item = getItem(fileredMenus.value, index)
+  if (item) emits('select', item)
+}
+const handleOpen = (...args: MenuOpenCloseEvent) => {
+  emits('open', args)
+}
+const handleClose = (...args: MenuOpenCloseEvent) => {
+  emits('close', args)
+}
 </script>
-<style lang="scss" scoped>
-:deep(.el-sub-menu__title) {
+
+<style lang="scss">
+.el-menu--vertical .el-sub-menu__title {
   padding-right: 0 !important;
+}
+
+.el-menu--horizontal.el-menu {
+  border-bottom: 0 !important;
 }
 </style>

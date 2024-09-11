@@ -9,6 +9,7 @@
           :command="{ item, index }"
           :class="{ active: index === currentIndex }"
         >
+          <!-- method 3 -->
           <div class="flex items-center">
             <Iconify
               v-if="item.icon"
@@ -16,9 +17,8 @@
               v-bind="iconProps"
               class="mr-2"
               :class="iconClass"
-            >
-            </Iconify>
-            <slot :item="item" name="item"></slot>
+            ></Iconify>
+            <slot name="item" :item="item"></slot>
           </div>
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -26,35 +26,57 @@
   </el-dropdown>
 </template>
 
-<script setup lang="ts" generic="T extends { icon?: string }">
-import type { IconProps } from '@iconify/vue'
+<script setup lang="ts" generic="T extends { icon?: string | IconifyIcon }">
+import type { IconifyIcon } from '@iconify/vue'
+import type { DropDownProps } from './types'
 
-interface dropdownProps extends Partial<IconProps> {
-  items: T[]
-  iconProps?: Partial<IconProps>
-  iconClass?: string
-}
+// interface DropDownProps {
+//   items: T[]
+//   iconProps?: Partial<IconProps>
+//   iconClass?: string
+//   // current?: number
+// }
 
-const props = defineProps<dropdownProps>()
+const props = defineProps<DropDownProps<T>>()
+const emits = defineEmits<{
+  change: [item: T, index: number]
+}>()
 
+// method 1
+// const currentIndex = ref(props.current || 0)
+
+// method 2
 const currentIndex = defineModel('modelValue', {
   default: 0
 })
+const currentItem = defineModel<T>('item', {
+  default: () => ({})
+})
 
-const emits = defineEmits<{
-  change: [item: T, index?: number]
-}>()
+onBeforeMount(() => {
+  currentItem.value = props.items[currentIndex.value]
+})
+
+// method 1
+// watch(
+//   () => props.current,
+//   () => {
+//     if (props.current) currentIndex.value = props.current
+//   }
+// )
 
 const handleCommand = (command: { item: T; index: number }) => {
   currentIndex.value = command.index
+  currentItem.value = command.item
   emits('change', command.item, command.index)
 }
 </script>
+
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item) {
   &.active {
-    background-color: var(--el-dropdown-menuItem-hover-fill);
     color: var(--el-dropdown-menuItem-hover-color);
+    background-color: var(--el-dropdown-menuItem-hover-fill);
   }
 }
 </style>

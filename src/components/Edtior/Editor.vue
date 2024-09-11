@@ -46,12 +46,12 @@ const history = ref('')
 const emits = defineEmits(['init'])
 
 watch(modelValue, (newVal) => {
+  console.log('in')
   if (editorInstance.value && newVal && `${newVal}` !== editorInstance.value.getValue()) {
     editorInstance.value.setValue(newVal + '')
   }
 })
 
-//当对象中的属性变化就会触发wantch事件，不这么写只有引用变化才行
 const fn = useDebounceFn((newOptions) => {
   if (editorInstance.value) {
     try {

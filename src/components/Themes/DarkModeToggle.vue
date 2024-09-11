@@ -1,33 +1,33 @@
 <template>
   <el-switch
+    style="--el-switch-on-color: #333"
     v-model="isDark"
     :active-action-icon="Moon"
-    :inactive-action-icon="Sunny"
-    style="--el-switch-on-color: #333"
+    :inactive-action-icon="Sun"
+    size="large"
   />
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 const props = defineProps({
-  dark: {
-    type: Boolean,
-    default: false
-  }
+  dark: Boolean
 })
 
 const emits = defineEmits(['change'])
 
-const Moon = () =>
-  h('i', {
-    class: 'i-prime-moon'
-  })
-const Sunny = () =>
-  h('i', {
-    class: 'i-octicon-sun-24'
-  })
+const Moon = () => <i class="i-prime:moon text-3xl"></i>
+const Sun = () => <i class="i-octicon:sun-24 text-3xl"></i>
+
 const isDark = useStorage('dark-mode-flag', props.dark)
-// 在页面加载时设置为浅色主题
 const preferredDark = usePreferredDark()
+
+onMounted(() => {
+  // 如果用户未设置过darkmode，则使用系统的暗黑模式的状态
+  if (typeof isDark.value === 'undefined' && !props.dark) {
+    toggleMode(preferredDark.value)
+    isDark.value = preferredDark.value
+  }
+})
 
 function toggleMode(flag: boolean) {
   if (flag) {
@@ -36,9 +36,8 @@ function toggleMode(flag: boolean) {
     document.documentElement.classList.remove('dark')
   }
 }
-
 watch(
-  isDark,
+  [isDark],
   () => {
     nextTick(() => {
       toggleMode(isDark.value)
@@ -49,13 +48,18 @@ watch(
     immediate: true
   }
 )
-
-watch(preferredDark, () => {
+// 跟随系统
+watch([preferredDark], () => {
   nextTick(() => {
     toggleMode(preferredDark.value)
-    //当修改系统主题时，主题组件的颜色要跟着变
     isDark.value = preferredDark.value
   })
 })
 </script>
+<!-- <script setup lang="ts">
+const Moon = () => h('i', {
+  class: 'i-prime:moon'
+})
+</script> -->
+
 <style scoped></style>

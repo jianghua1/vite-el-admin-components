@@ -1,45 +1,45 @@
 <template>
   <!-- tabs -->
-  <el-tabs :class="wrapClass" :style="wrapStyle" @tab-click="handleClickTab">
-    <el-tab-pane :label="tab.title" v-for="(tab, index) in lists" :key="index">
+  <el-tabs v-model="activeName" :class="wrapClass" :style="wrapStyle" @tab-click="handleTabClick">
+    <el-tab-pane :label="tab.title" :name="tab.title" v-for="(tab, index) in lists" :key="index">
       <!-- tabs-content -->
       <ul v-if="tab.contents && tab.contents.length">
-        <li v-for="(content, index2) in tab.contents" :key="index2">
-          <el-row justify="center" align="middle" class="hover:bg-blue-200 py-2">
+        <li
+          v-for="(item, iIndex) in tab.contents"
+          :key="iIndex"
+          class="cursor-pointer hover:bg-sky-100 py-2"
+        >
+          <el-row justify="center" align="middle">
             <el-col
               :span="4"
               align="middle"
-              @click="() => handleClickAvatar(content.avatar! as AvatarProps)"
-              v-if="content.avatar"
+              @click="() => handleClickAvatar(item.avatar as AvatarProps)"
+              v-if="item.avatar"
             >
               <!-- 头像 -->
-              <el-avatar v-bind="Object.assign({ size: 'small' }, content.avatar)" />
+              <el-avatar v-bind="Object.assign({ size: 'small' }, item.avatar)" />
             </el-col>
-            <el-col :span="20" @click="() => handleClickItem(content)">
+            <el-col :span="20" class="px-3" @click="() => handleClickItem(item)">
               <!-- 消息 -->
               <el-row align="middle" class="flex-nowrap! mb-2">
                 <!-- 消息标题 -->
                 <div class="text-base line-clamp-1">
-                  {{ content.title }}
+                  {{ item.title }}
                 </div>
-                <el-tag
-                  v-if="content.tag"
-                  type="danger"
-                  size="small"
-                  class="ml-2"
-                  v-bind="content.tagProps"
-                  >{{ content.tag }}</el-tag
-                >
+                <!-- 标签 -->
+                <el-tag v-if="item.tag" class="ml-2" effect="dark" v-bind="item.tagProps">{{
+                  item.tag
+                }}</el-tag>
               </el-row>
-              <el-row v-if="content.content">
-                <!-- 消息正文 -->
-                <div class="text-sm text-gray mb-2 line-clamp-2">
-                  {{ content.content }}
+              <el-row v-if="item.content">
+                <!-- 消息内容 -->
+                <div class="text-sm text-gray-400 mb-2 line-clamp-2">
+                  {{ item.content }}
                 </div>
               </el-row>
-              <el-row v-if="content.time">
+              <el-row v-if="item.time">
                 <!-- 消息时间 -->
-                <div class="text-sm text-gray-500">{{ content.time }}</div>
+                <div class="text-sm text-gray-400">{{ item.time }}</div>
               </el-row>
             </el-col>
           </el-row>
@@ -50,10 +50,10 @@
   <!-- buttons -->
   <div class="flex w-full justify-around border-t">
     <div
-      class="py-3 border-r flex-1 flex justify-center items-center hover:bg-sky-200 cursor-pointer"
+      class="flex-1 py-3 border-r flex items-center justify-center hover:bg-sky-100 cursor-pointer text-gray-500"
       v-for="(action, index) in actions"
-      :key="index"
       @click="action.click"
+      :key="index"
     >
       <Iconify
         v-if="action.icon"
@@ -65,37 +65,46 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import type { TabsPaneContext } from 'element-plus'
 
-import type { AvatarProps } from 'element-plus'
-import type { MessageListItem, NoticeMessageListProps } from './types'
-// import { Iconify } from '../Icon/Iconify.vue';
+<script setup lang="tsx">
+import type { AvatarProps, TabsPaneContext } from 'element-plus'
+
+import Iconify from '../Icon/Iconify.vue'
+import type { NoticeMessageListProps, MessageListItem } from './types'
 
 const props = defineProps<NoticeMessageListProps>()
-//事件传递
+
+const activeName = ref(props?.lists[0].title || '')
+
+// 事件传递
 const emits = defineEmits<{
-  clickAvatar: [avatar: AvatarProps]
+  clickAvatar: [avatar?: AvatarProps]
   clickItem: [item: MessageListItem]
   clickTab: [tab: TabsPaneContext, event: Event]
 }>()
-const handleClickAvatar = (avatar: AvatarProps) => {
+
+const handleClickAvatar = (avatar: AvatarProps | undefined) => {
   emits('clickAvatar', avatar)
 }
 const handleClickItem = (item: MessageListItem) => {
   emits('clickItem', item)
 }
-const handleClickTab = (tab: TabsPaneContext, event: Event) => {
+
+const handleTabClick = (tab: TabsPaneContext, event: Event) => {
   emits('clickTab', tab, event)
 }
 </script>
+
 <style scoped lang="scss">
-:deep(.el-tabs__nav) {
-  padding-left: 10px;
+:deep(.el-tabs__nav-scroll) {
+  @apply pl-4;
+}
+
+:deep(.el-tabs__header) {
+  @apply m-0;
 }
 
 :deep(.el-tabs__content) {
-  padding-left: 10px;
-  padding-right: 10px;
+  @apply my-2;
 }
 </style>

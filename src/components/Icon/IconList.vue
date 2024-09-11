@@ -2,56 +2,76 @@
   <ul class="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] border-l border-t rounded">
     <li
       :class="[
-        'border-b border-r flex flex-col justify-center items-center cursor-pointer ',
+        'border-r border-b flex flex-col justify-center items-center cursor-pointer',
         itemClass
       ]"
       v-for="(i, index) in iconData"
       :key="index"
-      @click="handleClick(i, index)"
+      @click="handleClick(`${collection}:${i}`, index)"
     >
       <component
         :is="Icon"
         :icon="`${collection}:${i}`"
-        :class="[iconClass, { [activeClass]: choose === index }]"
-      >
-      </component>
-      <div v-if="showText" class="text-sm mt-3">{{ i }}</div>
+        :class="[
+          iconClass,
+          { [activeClass]: modelValue ? modelValue === `${collection}:${i}` : choose === index }
+        ]"
+      ></component>
+      <div class="text-sm mt-3" v-if="showText">{{ convertString(i) }}</div>
     </li>
   </ul>
 </template>
+
 <script setup lang="ts">
-import data from './icon-ep.json'
+// iconify -> element plus
 import { loadIcons, Icon } from '@iconify/vue'
-import type { IconListType } from './types'
+import data from './icon-ep.json'
+import type { IconListProps } from './types'
 
-// import json from '@iconify/json/json/ep.json';
-// console.log(Object.keys(json))
-// const iconsKeyAndValue = json.icons;
-// console.log(Object.keys(iconsKeyAndValue))
+const modelValue = defineModel()
 
-const props = withDefaults(defineProps<IconListType>(), {
+const props = withDefaults(defineProps<IconListProps>(), {
   iconData: () => data,
   collection: 'ep',
-  showText: false,
-  itemClass: 'hover:bg-sky-200 py-4',
   iconClass: 'text-3xl',
+  itemClass: 'hover:bg-sky-100  py-4',
   activeClass: ''
 })
 
+const emits = defineEmits(['click'])
+const choose = ref(-1)
+
 onBeforeMount(async () => {
-  await loadIcons(props.iconData)
+  props.iconData &&
+    props.iconData.length &&
+    (await loadIcons(props.iconData.map((o) => `${props.collection}:${o}`)))
 })
 
-//回调钩子
-const emits = defineEmits<{
-  click: [iconName: string]
-}>()
+function convertString(input: string): string {
+  const words = input.split('-')
+  const capitalizedWords = words.map((word, index) => {
+    if (index === 0) {
+      return capitalize(word)
+    } else {
+      return capitalize(word, true)
+    }
+  })
+  return capitalizedWords.join('')
+}
 
-const choose = ref(-1)
-//点击事件
-async function handleClick(iconName: string, index: number) {
-  choose.value = index
-  emits('click', iconName)
+function capitalize(word: string, capitalizeFirstLetter = false): string {
+  if (capitalizeFirstLetter) {
+    return word.charAt(0).toUpperCase() + word.slice(1)
+  } else {
+    return word.toLowerCase().replace(/(?:^|-)(\w)/g, (_, c) => c.toUpperCase())
+  }
+}
+
+async function handleClick(i: string, num: number) {
+  choose.value = num
+  modelValue.value = i
+  emits('click', i)
 }
 </script>
+
 <style scoped></style>

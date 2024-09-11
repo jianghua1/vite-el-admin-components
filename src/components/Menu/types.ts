@@ -1,4 +1,4 @@
-import type { IconifyIcon } from '@iconify/vue'
+import type { IconifyIcon, IconProps } from '@iconify/vue'
 import type { CSSProperties, Component } from 'vue'
 
 // export type Component<T = any> =
@@ -6,40 +6,44 @@ import type { CSSProperties, Component } from 'vue'
 //   | (() => Promise<T>)
 //   | (() => Promise<typeof import('*.vue')>)
 
+export interface RouteMeta extends Record<string | number | symbol, unknown> {
+  title?: string
+  layout?: string
+  // 菜单排序
+  order?: number
+  icon?: string | IconifyIcon
+  // 针对404这种页面
+  hideMenu?: boolean
+  // 禁用
+  disabled?: boolean
+}
+
 export interface AppRouteMenuItem {
-  // 菜单名（别名）
   name?: string | Symbol
   meta?: RouteMeta
   children?: AppRouteMenuItem[]
   alias?: string
   path: string
   component?: Component
+  redirect?: string
 }
 
-export interface RouteMeta extends Record<string | number | symbol, unknown> {
-  // 菜单的组件名
-  title?: string
-  layout?: string
-  // 菜单排序
-  order?: number
-  icon?: string | IconifyIcon
-  hideMenu?: boolean
-  //禁用
-  disabled?: boolean
-  // key: string
-}
-
-//控制icon的基础样式
 export interface IconOptions {
   style: CSSProperties
   class: string
 }
 
-export type EmitSelectType = [
+export interface DropDownProps<T> {
+  items: T[]
+  iconProps?: Partial<IconProps>
+  iconClass?: string
+  // current?: number
+}
+
+export type MenuSelectEvent = [
   index: string,
   indexPath: string[],
   item: any,
-  routeResult?: Promise<void | any>
+  routerResult?: Promise<void | any>
 ]
-
-export type OpenCloseType = [index: string, indexPath: string[]]
+export type MenuOpenCloseEvent = [index: string, indexPath: string[]]

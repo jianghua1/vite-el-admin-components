@@ -12,7 +12,6 @@
 
 <script setup lang='ts'>
 import type { FormSchema } from "el-admin-components";
-// import { useForm } from "@/components/Form/useForm";
 import { useForm } from "el-admin-components";
 import type { FormInstance, FormItemInstance } from 'element-plus';
 import { ref } from "vue";

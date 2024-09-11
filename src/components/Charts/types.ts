@@ -1,25 +1,18 @@
 import { init } from 'echarts/core'
 import * as echarts from 'echarts'
 
-import type { CSSProperties } from 'vue'
 import type { SetOptionOpts } from 'echarts'
 
+import type { CSSProperties } from 'vue'
+
 type InitType = typeof init
-export type InitParameter = Parameters<InitType>
-export type Theme = NonNullable<InitParameter[1]>
-export type InitOptions = NonNullable<InitParameter[2]>
-export type UpdateOptions = SetOptionOpts
 
-export type EChartsOption = echarts.EChartsOption
+type InitParameters = Parameters<InitType>
+// type Theme = NonNullable<InitParameters[1]>
+type InitOptions = NonNullable<InitParameters[2]>
+type UpdateOptions = SetOptionOpts
 
-type AutoresizeProp =
-  | boolean
-  | {
-      throttle?: number
-      onResize?: () => void
-    }
-
-export type LoadingOptions = {
+type LoadingOptions = {
   text?: string
   textColor?: string
   fontSize?: number | string
@@ -34,11 +27,18 @@ export type LoadingOptions = {
   zlevel?: number
 }
 
+type AutoresizeProp =
+  | boolean
+  | {
+      throttle?: number
+      onResize?: () => void
+    }
+
 export interface VEchartsProps {
-  option: EChartsOption
-  theme: {
-    type: Theme
-  }
+  option: echarts.EChartsOption
+  // theme: {
+  //   type: Theme
+  // }
   initOptions: InitOptions
   updateOptions: UpdateOptions
   group: string
@@ -52,6 +52,14 @@ export interface VueEchartsProps extends Partial<VEchartsProps> {
   theme?: 'dark' | 'default' | string
   style?: CSSProperties
   height?: string | number
-  charts: string
+  charts?: string
   components?: string[]
+  option: echarts.EChartsOption
+}
+
+export interface ChartsProps {
+  options: Object
+  width?: number | string
+  height?: number | string
+  autoresize?: boolean
 }

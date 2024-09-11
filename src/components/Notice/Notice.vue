@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-dropdown trigger="click">
-      <span>
-        <Notification v-bind="$props"></Notification>
+      <span class="el-dropdown-link">
+        <Notification v-bind="filterdProps"></Notification>
       </span>
       <template #dropdown>
         <Lists
@@ -10,22 +10,22 @@
           :actions="actions"
           :wrap-class="wrapClass"
           :wrap-style="wrapStyle"
-          v-bind="$attrs"
-        >
-        </Lists>
+          v-on="forwardedEvents"
+        ></Lists>
       </template>
     </el-dropdown>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { AvatarProps, TabsPaneContext } from 'element-plus'
+import type { MessageListItem, NoticeProps } from './types'
 import Lists from './NoticeMessageList.vue'
 import Notification from './Notification.vue'
-import type { NoticeProps, MessageListItem } from './types'
+import type { AvatarProps, TabsPaneContext } from 'element-plus'
 
 const props = defineProps<NoticeProps>()
-//事件传递
+
+// 事件传递
 const emits = defineEmits<{
   clickAvatar: [avatar: AvatarProps]
   clickItem: [item: MessageListItem]
@@ -39,8 +39,10 @@ const forwardedEvents = {
 }
 
 const filterdProps = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { actions, lists, ...restProps } = props
-  return [restProps]
+  return restProps
 })
 </script>
+
 <style scoped></style>

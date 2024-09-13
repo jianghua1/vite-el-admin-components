@@ -10,7 +10,6 @@ import * as TypeModule8 from './components/Notice/types'
 import * as TypeModule9 from './components/Player/types'
 import * as TypeModule10 from './components/Table/types'
 import * as TypeModule11 from './components/Themes/types'
-
 export type VpDropMenuProps = TypeModule0.DropMenuProps
 export type VpDropDownMenuItem = TypeModule0.DropDownMenuItem
 export type VpAvatarMenuProps = TypeModule0.AvatarMenuProps

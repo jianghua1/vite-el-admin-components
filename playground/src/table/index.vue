@@ -2,23 +2,23 @@
   <div>
     <el-tabs v-model="activeName" class="demo-tabs">
       <el-tab-pane label="基础示例" name="1">
-        <VTable :columns="columns" :data="tableData" :pagination="pagination" @page-current-change="handlePageChange"
+        <VpTable :columns="columns" :data="tableData" :pagination="pagination" @page-current-change="handlePageChange"
           @page-next-click="handlePageChange2" @page-prev-click="handlePageChange3"
-          @page-size-change="handlePageChange4"></VTable>
+          @page-size-change="handlePageChange4"></VpTable>
       </el-tab-pane>
       <el-tab-pane label="带斑马纹表格" name="2">
-        <VTable :columns="columns" :data="tableData" stripe></VTable>
+        <VpTable :columns="columns" :data="tableData" stripe></VpTable>
       </el-tab-pane>
       <el-tab-pane label="带边框表格" name="3">
-        <VTable :columns="columns" :data="tableData" border></VTable>
+        <VpTable :columns="columns" :data="tableData" border></VpTable>
       </el-tab-pane>
       <!-- <p>带状态表格</p> -->
       <!-- <VTable :columns="columns" :data="tableData" :row-class-name="tableRowClassName"></VTable> -->
       <el-tab-pane label="固定表头" name="4">
-        <VTable :columns="columns" :data="tableData" :height="500"></VTable>
+        <VpTable :columns="columns" :data="tableData" :height="500"></VpTable>
       </el-tab-pane>
       <el-tab-pane label="固定列" name="5">
-        <VTable :columns="fixedTableColumns" :data="fixedTableData">
+        <VpTable :columns="fixedTableColumns" :data="fixedTableData">
           <!-- <el-table-column fixed="right" label="Operations" width="120">
         <template #default="{ row, column, $index }">
         <template #default="scope">
@@ -26,15 +26,15 @@
           <el-button link type="primary" size="small">Edit</el-button>
         </template>
 </el-table-column> -->
-        </VTable>
+        </VpTable>
       </el-tab-pane>
 
       <el-tab-pane label="固定列和表头" name="6">
-        <VTable :columns="fixedTableColumns" :data="fixedTableData" :height="250"></VTable>
+        <VpTable :columns="fixedTableColumns" :data="fixedTableData" :height="250"></VpTable>
       </el-tab-pane>
 
       <el-tab-pane label="流体高度" name="7">
-        <VTable :columns="flowTableColumns" :data="flowTableData" :max-height="400">
+        <VpTable :columns="flowTableColumns" :data="flowTableData" :max-height="400">
           <el-table-column fixed="right" label="Operations" min-width="120">
             <template #default="scope">
               <el-button link type="primary" size="small" @click.prevent="deleteRow(scope.$index)">
@@ -42,22 +42,23 @@
               </el-button>
             </template>
           </el-table-column>
-        </VTable>
+        </VpTable>
         <el-button class="mt-4" style="width: 100%" @click="onAddItem">
           Add Item
         </el-button>
       </el-tab-pane>
 
       <el-tab-pane label="多级表头" name="8">
-        <VTable :columns="multiLevelTableColumns" :data="fixedTableData"></VTable>
+        <VpTable :columns="multiLevelTableColumns" :data="fixedTableData"></VpTable>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script setup lang='tsx'>
-import type { PaginationType, TableColumnType } from '@/components/Table/types';
+import type { VpPaginationType, VpTableColumnType } from 'el-admin-components';
 import dayjs from 'dayjs'
+import { ref } from 'vue';
 
 const activeName = ref('1')
 
@@ -70,7 +71,7 @@ const pagination = ref({
   pagerCount: 7,
   pageSizes: [10, 20, 30, 40, 50],
   total: 300
-} as PaginationType)
+} as VpPaginationType)
 
 const handleClick = (scope, opt: string) => {
   console.log("opt", opt)
@@ -90,7 +91,7 @@ const columns = [
     prop: 'address',
     label: '地址'
   }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const tableData = [
   {
@@ -151,7 +152,7 @@ const fixedTableColumns = [
   //     </>
   //   )
   // }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const fixedTableData = [
   {
@@ -201,7 +202,7 @@ const flowTableColumns = [
   { label: '地址', prop: 'address' },
   { label: '邮政编码', prop: 'zip' },
   { label: '标签', prop: 'tag' }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const flowTableData = ref([
   {

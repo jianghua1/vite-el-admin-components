@@ -1,13 +1,21 @@
 <template>
-  <MenuItem :data="data" :collapse="collapse" v-if="!menuHasChildren(data)">
-  </MenuItem>
+  <MenuItem :data="data" :collapse="collapse" v-if="!menuHasChildren(data)"> </MenuItem>
   <el-sub-menu :index="getIndex(data)" v-if="menuHasChildren(data)">
     <template #title v-if="!data.meta?.icon">{{ data.meta?.title || '' }}</template>
     <template #title v-else>
-      <Iconify :icon="data.meta?.icon" :style="iconProps?.style" :class="iconProps?.class"></Iconify>
+      <Iconify
+        :icon="data.meta?.icon"
+        :style="iconProps?.style"
+        :class="iconProps?.class"
+      ></Iconify>
       <span>{{ data.meta?.title || '' }}</span>
     </template>
-    <SubMenu v-for="child in data.children" :data="child" :key="`${data.path}/${child.path}`" v-bind="subAttrs">
+    <SubMenu
+      v-for="child in data.children"
+      :data="child"
+      :key="`${data.path}/${child.path}`"
+      v-bind="subAttrs"
+    >
     </SubMenu>
   </el-sub-menu>
 </template>

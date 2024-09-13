@@ -1,18 +1,32 @@
 <template>
   <div :class="['flex items-center flex-nowrap h-[50px] z-100 bg-white dark:bg-dark']">
-    <Iconify :icon="collapseModel ? 'ep:expand' : 'ep:fold'" class="ml-2 text-2xl cursor-pointer"
-      @click="collapseModel = !collapseModel" v-if="settings?.mode !== 'top'" v-show="showCollapse"></Iconify>
+    <Iconify
+      :icon="collapseModel ? 'ep:expand' : 'ep:fold'"
+      class="ml-2 text-2xl cursor-pointer"
+      @click="collapseModel = !collapseModel"
+      v-if="settings?.mode !== 'top'"
+      v-show="showCollapse"
+    ></Iconify>
     <Breadcrumb v-if="!['mix', 'top'].includes(settings?.mode || '')"></Breadcrumb>
     <div class="relative overflow-x-hidden flex-grow">
       <slot></slot>
     </div>
     <el-row class="items-center flex-nowrap">
       <ThemeSettings v-bind="settings" @change="handleChange"></ThemeSettings>
-      <DarkModeToggle :dark="settings?.darkMode" @change="handleDarkModeToggle" class="mr-2"></DarkModeToggle>
+      <DarkModeToggle
+        :dark="settings?.darkMode"
+        @change="handleDarkModeToggle"
+        class="mr-2"
+      ></DarkModeToggle>
       <FullScreen class="mr-2"></FullScreen>
       <el-divider direction="vertical"></el-divider>
       <!-- 用户头像下拉菜单 -->
-      <AvatarMenu v-if="username || src" class="mr-4" v-bind="avatarProps" @command="handleCommand"></AvatarMenu>
+      <AvatarMenu
+        v-if="username || src"
+        class="mr-4"
+        v-bind="avatarProps"
+        @command="handleCommand"
+      ></AvatarMenu>
     </el-row>
   </div>
 </template>
@@ -69,8 +83,6 @@ const handleDarkModeToggle = (dark: boolean) => {
   localProps.settings!.darkMode = dark
   // emits('settingsChange', localProps.settings!)
 }
-
-
 </script>
 
 <style scoped></style>

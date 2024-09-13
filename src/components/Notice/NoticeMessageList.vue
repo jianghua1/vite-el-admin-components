@@ -68,6 +68,7 @@
 
 <script setup lang="tsx">
 import type { AvatarProps, TabsPaneContext } from 'element-plus'
+import { ref } from 'vue'
 
 import Iconify from '../Icon/Iconify.vue'
 import type { NoticeMessageListProps, MessageListItem } from './types'

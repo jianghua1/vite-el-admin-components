@@ -125,6 +125,8 @@ export {${components.join(', ')}}
 `
 
 mainFileContent += '\n' + `${componentExports}\n${pluginContent}\n${hooksExports}`
+mainFileContent += `export * from './components-types'`
+
 fs.writeFileSync(mainFilePath, mainFileContent)
 console.log('build script ok')
 

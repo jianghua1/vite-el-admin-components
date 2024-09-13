@@ -2,8 +2,12 @@
   <el-breadcrumb :separator-icon="ArrowRight" class="ml-4" ref="breadcrumbRef">
     <transition-group name="breadcrumb">
       <!-- <transition-group name="breadcrumb" @enter="onEnter" :css="false"> -->
-      <el-breadcrumb-item :to="{ path: item.name }" v-for="(item, index) in breadcrumbData" :key="item.name"
-        :data-index="index">
+      <el-breadcrumb-item
+        :to="{ path: item.name }"
+        v-for="(item, index) in breadcrumbData"
+        :key="item.name"
+        :data-index="index"
+      >
         <span>{{ item.meta?.title }}</span>
       </el-breadcrumb-item>
     </transition-group>

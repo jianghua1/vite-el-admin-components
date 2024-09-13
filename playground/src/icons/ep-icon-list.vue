@@ -2,7 +2,7 @@
 <template>
   <el-switch v-model="copyTypeFlag" active-text="复制SVG图标数据" inactive-text="复制Icon名称">
   </el-switch>
-  <IconList @click="handleClick" :collection="iconPrefix" :show-text="showTextFlag"></IconList>
+  <VpIconList @click="handleClick" :collection="iconPrefix" :show-text="showTextFlag"></VpIconList>
 </template>
 <script setup lang='ts'>
 import { loadIcon } from '@iconify/vue';

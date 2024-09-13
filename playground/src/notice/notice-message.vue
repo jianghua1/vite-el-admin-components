@@ -1,18 +1,19 @@
 <template>
   <div>通知组件示例</div>
   <!-- <NoticeNotification value="1234" color="" size="9"></NoticeNotification> -->
-  <Notice :actions="actions" :lists="lists" wrap-class="w-[300px]" @click-item="handleClickItem"
-    @click-avatar="handleClickAvatar"></Notice>
+  <VpNotice :actions="actions" :lists="lists" wrap-class="w-[300px]" @click-item="handleClickItem"
+    @click-avatar="handleClickAvatar"></VpNotice>
 </template>
 
 <script setup lang='ts'>
-import type { NoticeActionsItem, NoticeMessageListOptions } from "@/components/Notice/types";
+import type { VpNoticeActionsItem, VpNoticeMessageListOptions } from "el-admin-components";
+import { ref } from "vue";
 
-const actions = ref<NoticeActionsItem[]>([
+const actions = ref<VpNoticeActionsItem[]>([
   { title: '清空', icon: 'ep:delete', click: () => console.log('清空') },
   { title: '更多', icon: 'ep:more', click: () => console.log('更多') }
 ])
-const lists = ref<NoticeMessageListOptions[]>([
+const lists = ref<VpNoticeMessageListOptions[]>([
   {
     title: '通知1',
     contents: [

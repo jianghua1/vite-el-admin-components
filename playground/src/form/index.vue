@@ -1,17 +1,17 @@
 <template>
-  <VForm v-model="model" :schema="schema" ref="formRef">
+  <VpForm v-model="model" :schema="schema" ref="formRef">
     <template #actions>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
         <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </template>
-  </VForm>
+  </VpForm>
   {{ formValue }}
 </template>
 
 <script setup lang='ts'>
-import type { FormSchema } from "el-admin-components";
+import type { VpFormSchema } from "el-admin-components";
 import { useForm } from "el-admin-components";
 import type { FormInstance, FormItemInstance } from 'element-plus';
 import { ref } from "vue";
@@ -199,7 +199,7 @@ const schema = ref([
       }
     ]
   }
-] as FormSchema)
+] as VpFormSchema)
 
 const { model, formValue } = useForm(schema.value)
 

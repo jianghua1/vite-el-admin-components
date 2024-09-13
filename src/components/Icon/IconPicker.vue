@@ -5,10 +5,15 @@
       <slot>components.icon-picker</slot>
     </el-button>
     <!-- dialog -->
-    <el-dialog :title="$t(title)" :width="width" v-model="show">
+    <el-dialog :title="title" :width="width" v-model="show">
       <!-- icon-list -->
-      <IconList item-class="hover:bg-sky-100 p-1" icon-class="text-2xl" :show-text="false" @click="handleClick"
-        activeClass="text-[#409eff]"></IconList>
+      <IconList
+        item-class="hover:bg-sky-100 p-1"
+        icon-class="text-2xl"
+        :show-text="false"
+        @click="handleClick"
+        activeClass="text-[#409eff]"
+      ></IconList>
       <!-- settings -->
       <div class="p-2 flex">
         <div class="mr-4">

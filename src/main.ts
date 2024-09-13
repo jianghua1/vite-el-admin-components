@@ -14,6 +14,7 @@ import Form from './components/Form/Form.vue'
 import FormItem from './components/Form/FormItem.vue'
 import FormLayout from './components/Form/FormLayout.vue'
 import LoginForm from './components/Form/LoginForm.vue'
+import Popover from './components/Form/Popover.vue'
 import IconfontIcon from './components/Icon/IconfontIcon.vue'
 import Iconify from './components/Icon/Iconify.vue'
 import IconList from './components/Icon/IconList.vue'
@@ -54,6 +55,7 @@ export const globalPlugin = {
     app.component('VpFormItem', FormItem)
     app.component('VpFormLayout', FormLayout)
     app.component('VpLoginForm', LoginForm)
+    app.component('VpPopover', Popover)
     app.component('VpIconfontIcon', IconfontIcon)
     app.component('VpIconify', Iconify)
     app.component('VpIconList', IconList)
@@ -96,6 +98,7 @@ export {
   FormItem as VpFormItem,
   FormLayout as VpFormLayout,
   LoginForm as VpLoginForm,
+  Popover as VpPopover,
   IconfontIcon as VpIconfontIcon,
   Iconify as VpIconify,
   IconList as VpIconList,
@@ -129,5 +132,4 @@ export { useForm } from './components/Form/useForm'
 export { useMenu } from './components/Menu/useMenu'
 export { useAudioPlayer } from './components/Player/useAudioPlayer'
 export { useDrag } from './components/Table/hooks/useDrag'
-
 export * from './components-types'

@@ -1,14 +1,22 @@
 <template>
   <el-menu-item :index="getIndex(data)" :disabled="data.meta?.disabled" v-if="!data.meta?.icon">{{
     data.meta?.title
-    }}</el-menu-item>
+  }}</el-menu-item>
   <template v-else>
     <el-menu-item v-if="collapse" :index="getIndex(data)" :disabled="data.meta?.disabled">
-      <Iconify :icon="data.meta?.icon" :style="iconProps?.style" :class="iconProps?.class"></Iconify>
+      <Iconify
+        :icon="data.meta?.icon"
+        :style="iconProps?.style"
+        :class="iconProps?.class"
+      ></Iconify>
       <template #title>data.meta?.title || ''</template>
     </el-menu-item>
     <el-menu-item v-else :index="getIndex(data)" :disabled="data.meta?.disabled">
-      <Iconify :icon="data.meta?.icon" :style="iconProps?.style" :class="iconProps?.class"></Iconify>
+      <Iconify
+        :icon="data.meta?.icon"
+        :style="iconProps?.style"
+        :class="iconProps?.class"
+      ></Iconify>
       <span>data.meta?.title || ''</span>
     </el-menu-item>
   </template>

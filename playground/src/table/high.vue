@@ -1,18 +1,20 @@
 <template>
   <el-tabs v-model="activeName">
     <el-tab-pane label="自适应高度" name="1">
-      <VTable :data="tableData" :columns="columns" highlight-current-row :pagination="pagination" adaptive>
-      </VTable>
+      <VpTable :data="tableData" :columns="columns" highlight-current-row :pagination="pagination" adaptive>
+      </VpTable>
     </el-tab-pane>
     <el-tab-pane label="列拖拽" name="2">
-      <VTable :data="tableData" :columns="columns" highlight-current-row :pagination="pagination" adaptive draggableCol>
-      </VTable>
+      <VpTable :data="tableData" :columns="columns" highlight-current-row :pagination="pagination" adaptive
+        draggableCol>
+      </VpTable>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script setup lang='ts'>
-import type { PaginationType, TableColumnType } from '@/components/Table/types';
+import type { VpPaginationType, VpTableColumnType } from 'el-admin-components';
+import { ref } from 'vue';
 
 
 const activeName = ref('1')
@@ -53,7 +55,7 @@ const columns = [
     prop: 'address',
     label: '地址'
   }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const pagination = ref({
   align: 'center',
@@ -63,7 +65,7 @@ const pagination = ref({
   pagerCount: 7,
   pageSizes: [10, 20, 30, 40, 50],
   total: 300
-} as PaginationType)
+} as VpPaginationType)
 
 
 </script>

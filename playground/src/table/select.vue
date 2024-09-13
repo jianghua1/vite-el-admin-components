@@ -2,17 +2,17 @@
   <div>
     <el-tabs v-model="activeName" class="demo-tabs">
       <el-tab-pane label="单选" name="1">
-        <VTable @row-click="handleRowClick" :columns="fixedTableColumns" :data="fixedTableData" highlight-current-row>
-        </VTable>
+        <VpTable @row-click="handleRowClick" :columns="fixedTableColumns" :data="fixedTableData" highlight-current-row>
+        </VpTable>
         <p>行点击回调内容</p>
         <p>{{ rowClickRef }}</p>
         <p>菜单点击回调内容</p>
         <p>{{ menuClickRef }}</p>
       </el-tab-pane>
       <el-tab-pane label="多选" name="2">
-        <VTable ref="multipleTableRef" :columns="selectColumns" :data="tableData" highlight-current-row
+        <VpTable ref="multipleTableRef" :columns="selectColumns" :data="tableData" highlight-current-row
           @selection-change="handleSelectionChange">
-        </VTable>
+        </VpTable>
         <div style="margin-top: 20px">
           <el-button @click="toggleSelection([tableData[1], tableData[2]])">
             Toggle selection status of second and third rows
@@ -21,40 +21,40 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="排序" name="3">
-        <VTable :columns="orderColumns" :data="tableData" :default-sort="{ prop: 'date', order: 'descending' }">
-        </VTable>
+        <VpTable :columns="orderColumns" :data="tableData" :default-sort="{ prop: 'date', order: 'descending' }">
+        </VpTable>
       </el-tab-pane>
       <el-tab-pane label="过滤" name="4">
-        <VTable :columns="filterColumns" :data="filterTableData" ref="filterTableRef">
-        </VTable>
+        <VpTable :columns="filterColumns" :data="filterTableData" ref="filterTableRef">
+        </VpTable>
         <div>
           <el-button @click="resetDateFilter">reset date filter</el-button>
           <el-button @click="clearFilter">reset all filters</el-button>
         </div>
       </el-tab-pane>
       <el-tab-pane label="插槽" name="5">
-        <VTable :columns="customColumns" :data="customTableData">
+        <VpTable :columns="customColumns" :data="customTableData">
           <el-table-column label="Operations">
             <template #default="scope">
               <el-button size="small" @click="handleEdit(scope)">Edit</el-button>
               <el-button size="small" type="danger" @click="handleDelete(scope)">Delete</el-button>
             </template>
           </el-table-column>
-        </VTable>
+        </VpTable>
       </el-tab-pane>
       <el-tab-pane label="树形结构" name="8">
-        <VTable :columns="treeTableColumns" :data="treeTableData" default-expand-all row-key="id" border></VTable>
+        <VpTable :columns="treeTableColumns" :data="treeTableData" default-expand-all row-key="id" border></VpTable>
       </el-tab-pane>
       <el-tab-pane label="表尾合计" name="9">
-        <VTable :columns="sumTableColumns" :data="sumTableData" show-summary border></VTable>
-        <VTable :columns="sumTableColumns" :data="sumTableData" show-summary :summary-method="getSummaries" border>
-        </VTable>
+        <VpTable :columns="sumTableColumns" :data="sumTableData" show-summary border></VpTable>
+        <VpTable :columns="sumTableColumns" :data="sumTableData" show-summary :summary-method="getSummaries" border>
+        </VpTable>
       </el-tab-pane>
       <el-tab-pane label="行和列合并" name="10">
-        <VTable :columns="sumTableColumns" :data="sumTableData" :span-method="arraySpanMethod" border></VTable>
-        <VTable :columns="sumTableColumns" :data="sumTableData" :span-method="objectSpanMethod" border
+        <VpTable :columns="sumTableColumns" :data="sumTableData" :span-method="arraySpanMethod" border></VpTable>
+        <VpTable :columns="sumTableColumns" :data="sumTableData" :span-method="objectSpanMethod" border
           style="width: 100%; margin-top: 20px">
-        </VTable>
+        </VpTable>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -62,10 +62,11 @@
 
 <script setup lang='tsx'>
 
-import type { TableColumnType } from "@/components/Table/types"
+import type { VpTableColumnType } from "el-admin-components"
 import type { ElTable } from "element-plus"
-import PopOver from "@/components/Table/Popover.vue"
-import { Timer } from '@element-plus/icons-vue';
+import VpPopOver from "el-admin-components"
+import { Timer } from '@element-plus/icons';
+import { ref, h } from "vue";
 
 const activeName = ref('1')
 const rowClickRef = ref()
@@ -105,7 +106,7 @@ const fixedTableColumns = [
       </>
     )
   }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const fixedTableData = [
   {
@@ -198,7 +199,7 @@ const selectColumns = [
   { label: '日期', prop: 'date' },
   { label: '姓名', prop: 'name' },
   { label: '地址', prop: 'address' },
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<User[]>([])
@@ -221,12 +222,12 @@ const orderColumns = [
   { label: '日期', prop: 'date', sortOrders: true },
   { label: '姓名', prop: 'name' },
   { label: '地址', prop: 'address' },
-] as TableColumnType[]
+] as VpTableColumnType[]
 //过滤
 const filterHandler = (
   value: string,
   row: User,
-  column: TableColumnType
+  column: VpTableColumnType
 ) => {
   const property = column['property']
   return row[property as string] === value
@@ -315,12 +316,12 @@ const customColumns = [
     // prop: 'name'
     defaultSlot: (scope: any) => {
       const { row } = scope;
-      return h(PopOver, {
+      return h(VpPopOver, {
         row: row
       });
     }
   }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const customTableData: User[] = [
   {
@@ -388,7 +389,7 @@ const treeTableColumns = [
   { label: '日期', prop: 'date' },
   { label: '姓名', prop: 'name' },
   { label: '地址', prop: 'address' }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 //表尾合计行
 interface Product {
@@ -400,7 +401,7 @@ interface Product {
 }
 
 interface SummaryMethodProps<T = Product> {
-  columns: TableColumnType[]
+  columns: VpTableColumnType[]
   data: T[]
 }
 
@@ -410,7 +411,7 @@ const sumTableColumns = [
   { label: 'Amount 1', prop: 'amount1', sortable: true },
   { label: 'Amount 2', prop: 'amount2', sortable: true },
   { label: 'Amount 3', prop: 'amount3', sortable: true }
-] as TableColumnType[]
+] as VpTableColumnType[]
 
 const getSummaries = (param: SummaryMethodProps) => {
   const { columns, data } = param
@@ -478,7 +479,7 @@ const sumTableData: Product[] = [
 //合并行或列
 interface SpanMethodProps {
   row: User
-  column: TableColumnType
+  column: VpTableColumnType
   rowIndex: number
   columnIndex: number
 }

@@ -1,13 +1,14 @@
 <template>
   <div>
-    <IconPicker @submit="handleSubmit"></IconPicker>
+    <VpIconPicker @submit="handleSubmit">
+    </VpIconPicker>
   </div>
 </template>
 
 <script setup lang='ts'>
-import type { IconPickerSubmitDataType } from '@/components/Icon/types';
+import type { VpIconPicker } from 'el-admin-components';
 
-const handleSubmit = (data: IconPickerSubmitDataType) => {
+const handleSubmit = (data: any) => {
 }
 </script>
 <style scoped></style>
